@@ -1,0 +1,16 @@
+{
+  "name": "Layanan Pegawai LMSt ARK",
+  "short_name": "Layanan LMSt",
+  "description": "Satu pintu permintaan kebutuhan non-teknis pegawai ARK",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#EEF5FC",
+  "theme_color": "#2B6CB0",
+  "lang": "id",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

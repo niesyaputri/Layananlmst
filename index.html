@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2B6CB0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Layanan LMSt">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Layanan Pegawai LMSt ARK</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF5FC;--ink:#1B3350;--muted:#526A87;--line:#D3E3F4;--pri:#2B6CB0;--tint:#DCEBFA;--white:#fff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg)}
+body{font-family:'Nunito',system-ui,'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;color:var(--ink);font-size:15px;line-height:1.4}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer}
+#app{max-width:480px;margin:0 auto;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;background:var(--bg);position:relative}
+@media(min-width:700px){body{background:#E3EEF9}#app{box-shadow:0 0 0 1px var(--line);}}
+.screen{flex:1;display:flex;flex-direction:column;gap:14px;padding:calc(env(safe-area-inset-top) + 20px) 20px 24px}
+.has-nav .screen{padding-bottom:20px}
+h1{margin:0;font-size:28px;line-height:1.15;font-weight:800}
+h2{margin:0;font-size:18px;font-weight:800}
+p{margin:0}
+.muted{color:var(--muted)}
+.small{font-size:12.5px}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:1.5px;color:var(--pri)}
+.card{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.hero{background:var(--tint);border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:10px}
+.emoji-row{display:flex;gap:8px;flex-wrap:wrap}
+.emoji-row span{width:42px;height:42px;border-radius:999px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:22px}
+.btn{height:52px;border:0;border-radius:14px;background:var(--pri);color:#fff;font-weight:800;font-size:16px;padding:0 18px;display:flex;align-items:center;justify-content:center;gap:8px;width:100%}
+.btn[disabled]{opacity:.45;cursor:default}
+.btn.sec{background:#fff;color:var(--pri);border:1px solid var(--pri);font-weight:700}
+.btn.soft{background:var(--tint);color:#1F4E8C}
+.btn.warn{background:#F7E0E4;color:#86384A}
+.btn.sm{height:auto;min-height:42px;font-size:13.5px;padding:8px 10px;line-height:1.2}
+.row{display:flex;gap:10px}
+.row>*{flex:1}
+.between{display:flex;align-items:center;justify-content:space-between;gap:8px}
+label.lbl{font-size:13px;font-weight:800;display:block;margin-bottom:6px}
+.req{color:var(--pri)}
+.inp{width:100%;min-height:48px;border:1.5px solid var(--line);border-radius:12px;background:#fff;padding:10px 14px;outline:none}
+.inp:focus{border-color:var(--pri);box-shadow:0 0 0 3px #DCEBFA}
+textarea.inp{resize:vertical;min-height:84px}
+.codes{display:flex;gap:10px}
+.codes input{width:56px;height:56px;text-align:center;font-size:24px;font-weight:800;border:1.5px solid var(--line);border-radius:14px;background:#fff;outline:none}
+.codes input:focus{border-color:var(--pri);box-shadow:0 0 0 3px #DCEBFA}
+.codes.ok input{border-color:#8FD0AA;background:#F2FBF6}
+.codes.bad input{border-color:#E3A6B2}
+.list{display:flex;flex-direction:column;gap:6px}
+.pick{border:1px solid var(--line);background:#fff;border-radius:14px;padding:11px 14px;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pick:active{background:var(--tint)}
+.chosen{background:var(--tint);border-radius:14px;padding:11px 14px;display:flex;justify-content:space-between;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:4px 11px;font-size:12px;font-weight:800;white-space:nowrap}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.fchip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font-size:13px;font-weight:700;white-space:nowrap;color:var(--muted)}
+.fchip.on{background:var(--pri);border-color:var(--pri);color:#fff}
+.topbar{display:flex;align-items:center;gap:10px}
+.back{width:40px;height:40px;border-radius:999px;border:1px solid var(--line);background:#fff;font-size:22px;line-height:1;color:var(--pri);display:flex;align-items:center;justify-content:center;flex:none}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.tile{border:0;border-radius:18px;padding:14px 6px;min-height:104px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;font-weight:800;font-size:13px;line-height:1.2}
+.tile .em{font-size:30px;line-height:1}
+.satk{border:2px solid transparent;border-radius:18px;padding:14px;text-align:left;display:flex;gap:12px;align-items:center;width:100%}
+.satk.mine{border-color:var(--pri)}
+.seg{display:flex;gap:8px}
+.seg button{flex:1;min-height:46px;border:1.5px solid var(--line);background:#fff;border-radius:12px;font-weight:700}
+.seg button.on{background:var(--pri);border-color:var(--pri);color:#fff}
+.tk{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px 14px;display:flex;flex-direction:column;gap:6px;text-align:left;width:100%}
+.tk .t{display:flex;gap:10px;align-items:flex-start}
+.tk .ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:21px;flex:none}
+.kv{display:flex;flex-direction:column;gap:2px;padding:7px 0;border-top:1px solid var(--line)}
+.kv:first-child{border-top:0}
+.kv .k{font-size:12px;color:var(--muted);font-weight:700}
+.kv .v{white-space:pre-wrap;word-break:break-word}
+.note{border-radius:14px;padding:11px 13px;display:flex;gap:10px;align-items:flex-start;font-size:13.5px}
+.note.blue{background:var(--tint);color:#1F4E8C}
+.note.rose{background:#F7E0E4;color:#86384A}
+.note.peach{background:#FBE6D4;color:#85461A}
+.note.green{background:#D8F0E2;color:#23603F}
+.note.lilac{background:#E6DEF7;color:#55388A}
+.option{border:1.5px solid var(--line);background:#fff;border-radius:18px;padding:15px;text-align:left;display:flex;flex-direction:column;gap:6px;width:100%}
+.option:active{background:var(--tint)}
+.nav{position:sticky;bottom:0;height:calc(72px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;z-index:5}
+.nav button{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--muted);font-size:11px;font-weight:700}
+.nav .pill{position:relative;width:48px;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.nav button.on{color:var(--pri)}
+.nav button.on .pill{background:var(--tint)}
+.badge{position:absolute;top:-6px;right:-2px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--pri);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);max-width:420px;width:calc(100% - 40px);background:#1B3350;color:#fff;border-radius:14px;padding:12px 16px;font-size:14px;z-index:50;box-shadow:0 6px 24px rgba(27,51,80,.3)}
+.toast.err{background:#86384A}
+.overlay{position:fixed;inset:0;background:rgba(27,51,80,.45);display:flex;align-items:flex-end;justify-content:center;z-index:40}
+.sheet{background:#fff;border-radius:24px 24px 0 0;padding:22px 20px calc(24px + env(safe-area-inset-bottom));width:100%;max-width:480px;display:flex;flex-direction:column;gap:14px}
+.spin{width:20px;height:20px;border:3px solid #fff;border-top-color:transparent;border-radius:999px;animation:sp .8s linear infinite}
+.spin.dark{border-color:var(--pri);border-top-color:transparent}
+@keyframes sp{to{transform:rotate(360deg)}}
+.center{display:flex;justify-content:center;padding:30px 0}
+.av{position:relative;width:46px;height:46px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
+.av .bd{position:absolute;top:-4px;right:-6px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:#fff;border:2px solid var(--pri);color:var(--pri);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.team{display:flex;flex-wrap:wrap;gap:10px}
+.team>div{width:64px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font-size:11.5px;font-weight:700;line-height:1.2}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.kpi{border-radius:16px;padding:10px 14px;display:flex;flex-direction:column;gap:2px}
+.kpi .n{font-size:24px;font-weight:800}
+.bar{height:12px;background:#E4EEF9;border-radius:999px;overflow:hidden;flex:1}
+.bar i{display:block;height:12px;background:var(--pri);border-radius:999px}
+.stack{display:flex;height:14px;border-radius:999px;overflow:hidden}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:11.5px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:999px;margin-right:5px;vertical-align:-1px}
+.org{display:flex;flex-direction:column;align-items:center}
+.org .top{background:var(--pri);color:#fff;border-radius:14px;padding:8px 18px;text-align:center}
+.org .vl{width:2px;height:14px;background:#B9CDE3}
+.org .hl{width:66%;height:2px;background:#B9CDE3}
+.org .kids{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.org .kid{display:flex;flex-direction:column;align-items:center}
+.org .kid>div:last-child{width:100%;border-radius:14px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
+.switch{width:52px;height:30px;border-radius:999px;border:0;background:#C9D8EA;position:relative;flex:none;transition:.15s}
+.switch i{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:999px;background:#fff;transition:.15s}
+.switch[aria-checked=true]{background:var(--pri)}
+.switch[aria-checked=true] i{left:25px}
+.tl{display:flex;flex-direction:column;gap:0}
+.tl>div{display:flex;gap:10px;padding:6px 0}
+.tl .dot{width:10px;height:10px;border-radius:999px;background:var(--pri);margin-top:6px;flex:none}
+.setup{background:#FBE6D4;color:#85461A;border-radius:14px;padding:12px 14px;font-size:13.5px}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* ============ PENGATURAN ============
+   Tempel URL Web app Google Apps Script di antara tanda kutip (lihat panduan pemasangan). */
+const API_URL = '';
+
+/* ============ UTIL ============ */
+const STATUS = {
+  'Baru': ['#D9E8FA', '#1F4E8C', '🆕'],
+  'Diproses': ['#E6DEF7', '#55388A', '⚙️'],
+  'Menunggu review': ['#FBE6D4', '#85461A', '🔎'],
+  'Selesai': ['#D8F0E2', '#23603F', '✅'],
+  'Tidak bisa diproses': ['#F7E0E4', '#86384A', '🚫'],
+  'Dibatalkan': ['#E4E8EE', '#52606F', '❌']
+};
+const FINAL = ['Selesai', 'Tidak bisa diproses', 'Dibatalkan'];
+const TILE = [['#D9E8FA', '#1F4E8C'], ['#E6DEF7', '#55388A'], ['#D8F0E2', '#23603F'], ['#FBE6D4', '#85461A'], ['#F7E0E4', '#86384A'], ['#DCEBFA', '#1B3350']];
+const SATKER_STYLE = {
+  'DPAI': ['🔍', '#D9E8FA', 'Departemen Audit Internal'],
+  'DRPK': ['🛡️', '#E6DEF7', 'Departemen Manajemen Risiko dan Pengendalian Kualitas'],
+  'DPIK': ['⚖️', '#D8F0E2', 'Departemen Penegakan Integritas dan Audit Khusus'],
+  'Depkom ARK': ['🏛️', '#FBE6D4', 'Deputi Komisioner Audit Internal, Manajemen Risiko dan Pengendalian Kualitas']
+};
+const LEVEL_STYLE = { L3: ['#2B6CB0', '#FFFFFF'], L2: ['#E6DEF7', '#55388A'], L1: ['#D9E8FA', '#1F4E8C'] };
+const BULAN = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
+function el(tag, props, ...kids) {
+  const n = document.createElement(tag);
+  for (const k in (props || {})) {
+    const v = props[k];
+    if (v == null || v === false) continue;
+    if (k === 'class') n.className = v;
+    else if (k === 'style') n.style.cssText = v;
+    else if (k.slice(0, 2) === 'on') n.addEventListener(k.slice(2), v);
+    else if (k === 'value') n.value = v;
+    else if (v === true) n.setAttribute(k, '');
+    else n.setAttribute(k, v);
+  }
+  kids.flat(Infinity).forEach(c => { if (c == null || c === false) return; n.append(c.nodeType ? c : document.createTextNode(String(c))); });
+  return n;
+}
+const sp = (t, s) => el('span', { style: s || '' }, t);
+function fmtD(s) { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s || ''); return m ? (+m[3]) + ' ' + BULAN[+m[2] - 1] : ''; }
+function fmtDT(s) { const m = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}:\d{2})/.exec(s || ''); return m ? (+m[3]) + ' ' + BULAN[+m[2] - 1] + ', ' + m[4] : ''; }
+function fmtDfull(s) { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s || ''); return m ? (+m[3]) + ' ' + BULAN[+m[2] - 1] + ' ' + m[1] : s; }
+function statusChip(st) { const c = STATUS[st] || STATUS['Baru']; return el('span', { class: 'chip', style: 'background:' + c[0] + ';color:' + c[1] }, c[2] + ' ' + st); }
+function initials(n) { const p = n.trim().split(/\s+/); return ((p[0] || '')[0] + (p[1] ? p[1][0] : (p[0] || '')[1] || '')).toUpperCase(); }
+function detailRows(t) {
+  return (t || '').split('\n').filter(Boolean).map(l => { const i = l.indexOf(': '); if (i <= 0) return ['', l]; const v = l.slice(i + 2); return [l.slice(0, i), /^\d{4}-\d{2}-\d{2}$/.test(v) ? fmtDfull(v) : v]; });
+}
+function wd(s) { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; }
+function dparse(s) { const m = /^(\d{4})-(\d{2})-(\d{2})(?: (\d{2}):(\d{2}))?/.exec(s || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3], +(m[4] || 0), +(m[5] || 0)) : null; }
+
+/* ============ API ============ */
+const LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);
+const API = (LOCAL && new URLSearchParams(location.search).get('api')) || API_URL;
+async function api(body) {
+  if (!API) throw new Error('Aplikasi belum tersambung ke Google Sheet. Hubungi tim LMSt.');
+  let res;
+  try {
+    res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body), redirect: 'follow' });
+  } catch (e) { throw new Error('Tidak ada koneksi. Coba lagi.'); }
+  let j;
+  try { j = await res.json(); } catch (e) { throw new Error('Server belum siap. Coba lagi sebentar lagi.'); }
+  if (!j.ok) throw new Error(j.error || 'Terjadi kesalahan');
+  return j;
+}
+
+/* ============ STATE ============ */
+const S = { screen: 'login', p: {}, kode: '', nama: '', satker: '', hello: null, mine: null, tim: null, pin: '', untuk: '', busy: false };
+const LS = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+};
+const app = document.getElementById('app');
+let toastT;
+function toast(msg, err) {
+  document.querySelectorAll('.toast').forEach(x => x.remove());
+  const t = el('div', { class: 'toast' + (err ? ' err' : ''), role: 'status' }, msg);
+  document.body.append(t); clearTimeout(toastT); toastT = setTimeout(() => t.remove(), err ? 4500 : 2500);
+}
+const isTim = () => !!(S.hello && S.hello.tim.includes(S.nama));
+const me = () => S.tim && S.tim.me;
+
+function go(screen, p, replace) {
+  S.screen = screen; S.p = p || {};
+  const st = { screen, p: S.p };
+  if (replace) history.replaceState(st, ''); else history.pushState(st, '');
+  render(); window.scrollTo(0, 0);
+}
+window.addEventListener('popstate', e => {
+  const st = e.state;
+  if (st && st.screen && S.nama) { S.screen = st.screen; S.p = st.p || {}; render(); }
+});
+
+/* ============ KERANGKA ============ */
+function nav(active) {
+  const items = [['buat', '✏️', 'Buat', () => go('satker')], ['mine', '📋', 'Permintaanku', () => openMine()]];
+  if (isTim()) items.push(['tim', '👥', 'Tim', () => openTim()]);
+  items.push(['saya', '🙂', 'Saya', () => go('saya')]);
+  const badge = isTim() && S.tim ? S.tim.tiket.filter(t => t.status === 'Baru').length : 0;
+  return el('div', { class: 'nav' }, items.map(([k, e, l, f]) =>
+    el('button', { class: k === active ? 'on' : '', onclick: f, 'aria-label': l },
+      el('span', { class: 'pill' }, e, k === 'tim' && badge ? el('span', { class: 'badge' }, badge) : null), sp(l))));
+}
+function shell(content, active) {
+  app.className = active ? 'has-nav' : '';
+  return [el('div', { class: 'screen' }, content), active ? nav(active) : null];
+}
+function topbar(label, right, onback) {
+  return el('div', { class: 'topbar' },
+    el('button', { class: 'back', 'aria-label': 'Kembali', onclick: onback || (() => history.back()) }, '‹'),
+    el('span', { style: 'font-weight:800;flex:1' }, label), right || null);
+}
+
+function render() {
+  const f = SCREENS[S.screen] || SCREENS.login;
+  const out = f();
+  app.replaceChildren(...out.filter(Boolean));
+}
+
+/* ============ MASUK ============ */
+const LOGIN = { digits: ['', '', '', ''], ok: false, bad: '', checking: false, q: '', picked: null };
+function loginScreen() {
+  const kids = [];
+  kids.push(el('div', { class: 'hero' },
+    el('div', { class: 'emoji-row' }, ['🏢', '🍔', '✈️', '📁', '🔐'].map(e => sp(e))),
+    el('div', {}, el('div', { class: 'eyebrow' }, 'LMSt ARK'), h1('Layanan Pegawai 👋')),
+    el('p', { class: 'muted' }, 'Satu pintu untuk kebutuhan non-teknis kantor. Ajukan sekali, pantau sampai selesai. ✨')));
+  if (!API) kids.push(el('div', { class: 'setup' }, '⚙️ Aplikasi belum tersambung ke Google Sheet. Isi API_URL di index.html (lihat panduan pemasangan).'));
+
+  const codes = el('div', { class: 'codes' + (LOGIN.ok ? ' ok' : LOGIN.bad ? ' bad' : '') });
+  const ins = [0, 1, 2, 3].map(i => el('input', {
+    type: 'password', inputmode: 'numeric', pattern: '[0-9]*', maxlength: '1', autocomplete: 'off', 'aria-label': 'Digit kode ' + (i + 1),
+    value: LOGIN.digits[i],
+    oninput: e => {
+      const v = e.target.value.replace(/\D/g, '').slice(-1); e.target.value = v; LOGIN.digits[i] = v; LOGIN.ok = false; LOGIN.bad = '';
+      if (v && i < 3) ins[i + 1].focus();
+      if (LOGIN.digits.every(Boolean)) checkKode(); else refreshLogin();
+    },
+    onkeydown: e => { if (e.key === 'Backspace' && !e.target.value && i > 0) { ins[i - 1].focus(); } },
+    onpaste: e => {
+      const t = (e.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, 4); if (!t) return; e.preventDefault();
+      t.split('').forEach((c, j) => { ins[j].value = c; LOGIN.digits[j] = c; }); if (t.length === 4) checkKode();
+    }
+  }));
+  codes.append(...ins);
+  kids.push(el('div', { id: 'login-code' }, el('label', { class: 'lbl' }, '🔑 Kode akses'), codes,
+    el('p', { class: 'muted small', style: 'margin-top:6px', id: 'code-help' }, LOGIN.checking ? 'Memeriksa kode…' : LOGIN.bad ? '⚠️ ' + LOGIN.bad : LOGIN.ok ? '✅ Kode benar' : 'Kode 4 angka dibagikan LMSt lewat grup kantor.')));
+
+  kids.push(el('div', { id: 'login-name', class: LOGIN.ok ? '' : 'hide' }, el('label', { class: 'lbl', for: 'q' }, '🙋 Nama kamu'), nameBox()));
+  kids.push(el('button', { class: 'btn', id: 'login-btn', disabled: !(LOGIN.ok && LOGIN.picked), onclick: doLogin }, 'Masuk 🚀'));
+  kids.push(el('p', { class: 'muted small', style: 'text-align:center' }, '🔒 Sekali masuk, perangkat ini mengingat nama pengguna.'));
+  app.className = '';
+  return [el('div', { class: 'screen' }, kids)];
+}
+function h1(t) { return el('h1', {}, t); }
+function h2(t) { return el('h2', {}, t); }
+function nameBox() {
+  const box = el('div', { style: 'display:flex;flex-direction:column;gap:8px' });
+  if (LOGIN.picked) {
+    box.append(el('div', { class: 'chosen' }, el('div', {}, el('b', {}, LOGIN.picked.nama), el('div', { class: 'muted small' }, LOGIN.picked.satker)),
+      el('button', { class: 'back', 'aria-label': 'Ganti nama', onclick: () => { LOGIN.picked = null; LOGIN.q = ''; refreshLogin(); setTimeout(() => document.getElementById('q') && document.getElementById('q').focus(), 0); } }, '✕')));
+    return box;
+  }
+  const list = el('div', { class: 'list', id: 'name-list' });
+  const inp = el('input', {
+    class: 'inp', id: 'q', type: 'search', placeholder: 'Ketik nama, misalnya Budi', autocomplete: 'off', value: LOGIN.q,
+    oninput: e => { LOGIN.q = e.target.value; fillNames(list); }
+  });
+  box.append(inp, list); fillNames(list);
+  return box;
+}
+function fillNames(list) {
+  list.replaceChildren();
+  const q = LOGIN.q.trim().toLowerCase(); if (q.length < 2 || !S.hello) return;
+  let hit = S.hello.pegawai.filter(p => p.nama.toLowerCase().split(/\s+/).some(w => w.startsWith(q)));
+  if (!hit.length) hit = S.hello.pegawai.filter(p => p.nama.toLowerCase().includes(q));
+  hit = hit.sort((a, b) => (b.nama.toLowerCase().startsWith(q)) - (a.nama.toLowerCase().startsWith(q))).slice(0, 8);
+  if (!hit.length) list.append(el('p', { class: 'muted small' }, 'Nama tidak ditemukan. Cek ejaan, atau hubungi tim LMSt.'));
+  hit.forEach(p => list.append(el('button', { class: 'pick', onclick: () => { LOGIN.picked = p; refreshLogin(); } }, el('b', {}, p.nama), sp(p.satker, 'color:var(--muted);font-size:13px'))));
+}
+function refreshLogin() { if (S.screen === 'login') { const f = document.activeElement && document.activeElement.id; render(); if (f === 'q') { const q = document.getElementById('q'); if (q) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); } } } }
+async function checkKode() {
+  const kode = LOGIN.digits.join(''); LOGIN.checking = true; LOGIN.bad = ''; refreshLoginKeep();
+  try { S.hello = await api({ action: 'hello', kode }); S.kode = kode; LOGIN.ok = true; }
+  catch (e) { LOGIN.ok = false; LOGIN.bad = e.message; LOGIN.digits = ['', '', '', '']; }
+  LOGIN.checking = false; render();
+  if (LOGIN.ok) setTimeout(() => { const q = document.getElementById('q'); q && q.focus(); }, 50);
+  else setTimeout(() => { const i = document.querySelector('.codes input'); i && i.focus(); }, 50);
+}
+function refreshLoginKeep() { const h = document.getElementById('code-help'); if (h) h.textContent = 'Memeriksa kode…'; }
+function doLogin() {
+  S.nama = LOGIN.picked.nama; S.satker = LOGIN.picked.satker; LS.set('lmst_sess', { kode: S.kode, nama: S.nama });
+  S.pin = (LS.get('lmst_pin') || {})[S.nama] || ''; S.mine = null; S.tim = null;
+  go('satker', {}, true); bgTim();
+}
+
+/* ============ PILIH SATKER ============ */
+function satkerScreen() {
+  const list = S.hello.satkerList;
+  return shell([
+    el('div', { class: 'hero' }, el('div', { class: 'eyebrow' }, 'LMSt ARK'), h1('Halo, ' + S.nama.split(' ')[0] + ' 👋'),
+      el('p', { class: 'muted' }, 'Kebutuhan ini untuk satker mana?')),
+    el('div', { class: 'list', style: 'gap:10px' }, list.map(s => {
+      const st = SATKER_STYLE[s] || ['🏢', '#DCEBFA', ''];
+      return el('button', { class: 'satk' + (s === S.satker ? ' mine' : ''), style: 'background:' + st[1], onclick: () => { S.untuk = s; go('layanan'); } },
+        sp(st[0], 'font-size:30px'), el('div', { style: 'flex:1' }, el('div', { style: 'font-weight:800;font-size:17px' }, s), el('div', { class: 'small', style: 'color:var(--muted)' }, st[2])),
+        s === S.satker ? el('span', { class: 'chip', style: 'background:#fff;color:#2B6CB0' }, 'Satker saya') : sp('›', 'font-size:22px;color:var(--pri)'));
+    }))
+  ], 'buat');
+}
+
+/* ============ LAYANAN ============ */
+function layananScreen() {
+  const st = SATKER_STYLE[S.untuk] || ['🏢'];
+  return shell([
+    topbar(st[0] + ' ' + S.untuk),
+    el('div', {}, h1('Layanan'), el('p', { class: 'muted' }, 'Pilih kebutuhanmu.')),
+    el('div', { class: 'grid3' }, S.hello.kategori.map((k, i) => {
+      const c = TILE[i % TILE.length];
+      return el('button', { class: 'tile', style: 'background:' + c[0] + ';color:' + c[1], onclick: () => { S.kat = k; go(k.mode === 'Update Data' ? 'updatedata' : 'form'); } },
+        el('span', { class: 'em' }, k.ikon), sp(k.nama));
+    }))
+  ], 'buat');
+}
+
+/* ============ FORM ============ */
+const FORM = {};
+function showField(k, f, vals) {
+  const konsum = k.fields.some(x => /^Butuh /.test(x.label));
+  if (konsum && (f.label === 'Siapa yang memesan konsumsi?' || /^Request menu/.test(f.label)))
+    return k.fields.filter(x => /^Butuh /.test(x.label)).some(x => vals[x.label] === 'Ya');
+  return true;
+}
+function fieldInput(f, vals, rerender) {
+  const set = v => { vals[f.label] = v; if (FORM.err) { FORM.err = ''; const n = document.querySelector('.note.rose'); if (n && S.screen === 'form') n.remove(); } };
+  if (f.type === 'select') {
+    if (f.options.length <= 3) {
+      const wrap = el('div', { class: 'seg' });
+      f.options.forEach(o => wrap.append(el('button', { type: 'button', class: vals[f.label] === o ? 'on' : '', onclick: () => { set(vals[f.label] === o && !f.required ? '' : o); rerender(); } }, o)));
+      return wrap;
+    }
+    return el('select', { class: 'inp', onchange: e => set(e.target.value) }, el('option', { value: '' }, 'Pilih…'), f.options.map(o => el('option', { value: o, selected: vals[f.label] === o }, o)));
+  }
+  const common = { class: 'inp', value: vals[f.label] || '', oninput: e => set(e.target.value) };
+  if (f.type === 'long') return el('textarea', Object.assign({ rows: '3' }, common));
+  if (f.type === 'date') return el('input', Object.assign({ type: 'date' }, common, { onchange: e => set(e.target.value) }));
+  if (f.type === 'time') return el('input', Object.assign({ type: 'time' }, common, { onchange: e => set(e.target.value) }));
+  if (f.type === 'number') return el('input', Object.assign({ type: 'number', min: '0', inputmode: 'numeric' }, common));
+  return el('input', Object.assign({ type: 'text', maxlength: '300' }, common));
+}
+function formScreen() {
+  const k = S.kat; const key = k.nama + '|' + S.untuk;
+  if (FORM.key !== key) { FORM.key = key; FORM.vals = {}; FORM.err = ''; }
+  const vals = FORM.vals;
+  const fields = k.fields.filter(f => showField(k, f, vals));
+  const hasKonsum = k.fields.some(f => /^Butuh /.test(f.label));
+  const body = [];
+  let sectionShown = false;
+  fields.forEach(f => {
+    if (hasKonsum && !sectionShown && (/^Butuh /.test(f.label))) { sectionShown = true; body.push(el('div', { style: 'font-weight:800;margin-top:6px' }, '🍽️ Konsumsi')); }
+    body.push(el('div', {}, el('label', { class: 'lbl' }, f.label, f.required ? el('span', { class: 'req' }, ' *') : null), fieldInput(f, vals, () => render())));
+  });
+  const st = SATKER_STYLE[S.untuk] || ['🏢'];
+  return shell([
+    topbar(st[0] + ' ' + S.untuk),
+    el('div', { style: 'display:flex;gap:12px;align-items:center' }, sp(k.ikon, 'font-size:40px'), el('div', {}, h1(k.nama), el('p', { class: 'muted small' }, k.deskripsi))),
+    k.catatan ? el('div', { class: 'note blue' }, sp('🔒'), sp(k.catatan)) : null,
+    el('div', { class: 'card' }, body),
+    FORM.err ? el('div', { class: 'note rose' }, sp('⚠️'), sp(FORM.err)) : null,
+    el('button', { class: 'btn', disabled: S.busy, onclick: () => submitForm() }, S.busy ? el('span', { class: 'spin' }) : 'Kirim permintaan 🚀')
+  ], 'buat');
+}
+async function submitForm(via, extraVals) {
+  const k = S.kat; const vals = Object.assign({}, FORM.vals, extraVals || {});
+  const shown = k.fields.filter(f => showField(k, f, vals));
+  for (const f of shown) if (f.required && !String(vals[f.label] || '').trim()) { FORM.err = 'Isian "' + f.label + '" wajib diisi'; render(); window.scrollTo(0, document.body.scrollHeight); return false; }
+  FORM.err = ''; S.busy = true; render();
+  try {
+    const r = await api({ action: 'submit', kode: S.kode, nama: S.nama, untuk: S.untuk, kategori: k.nama, via, detail: shown.map(f => ({ label: f.label, value: vals[f.label] || '' })) });
+    S.busy = false; FORM.key = ''; S.mine = null;
+    go('sukses', { no: r.no, pic: r.pic, target: r.target, kategori: k.nama, ikon: k.ikon }, true);
+    return true;
+  } catch (e) { S.busy = false; FORM.err = e.message; render(); return false; }
+}
+
+/* ============ UPDATE DATA ============ */
+function updateDataScreen() {
+  const k = S.kat; const link = S.hello.linkUpdate;
+  const st = SATKER_STYLE[S.untuk] || ['🏢'];
+  return shell([
+    topbar(st[0] + ' ' + S.untuk),
+    el('div', { style: 'display:flex;gap:12px;align-items:center' }, sp(k.ikon, 'font-size:40px'), el('div', {}, h1(k.nama), el('p', { class: 'muted' }, 'Pilih cara pengisian yang sesuai.'))),
+    el('button', { class: 'option', onclick: () => go('form') },
+      el('div', { class: 'between' }, sp('✍️ Isi tulisan di sini', 'font-weight:800;font-size:16px'), el('span', { class: 'chip', style: 'background:#D9E8FA;color:#1F4E8C' }, 'Cara A')),
+      el('p', { class: 'muted small' }, 'Untuk perubahan sederhana yang cukup dijelaskan dengan tulisan. Tanpa dokumen pendukung.'),
+      sp('Lanjut isi di aplikasi ›', 'color:var(--pri);font-weight:800')),
+    el('button', { class: 'option', disabled: !link, style: link ? '' : 'opacity:.5', onclick: () => link && go('updateb') },
+      el('div', { class: 'between' }, sp('📎 Isi dan unggah dokumen', 'font-weight:800;font-size:16px'), el('span', { class: 'chip', style: 'background:#E6DEF7;color:#55388A' }, 'Cara B')),
+      el('p', { class: 'muted small' }, 'Untuk perubahan yang perlu dokumen. Dibuka lewat link Microsoft untuk mengisi formulir dan mengunggah berkas.'),
+      sp(link ? 'Buka formulir Microsoft ↗' : 'Link formulir belum diatur oleh tim LMSt', 'color:var(--pri);font-weight:800')),
+    el('div', { class: 'note blue' }, sp('📌'), sp('Pada Cara B, tiket tetap dibuat di aplikasi ini supaya bisa dipantau, lalu kamu diarahkan ke formulir Microsoft.')),
+    el('div', { class: 'note peach' }, sp('🔒'), sp('Jangan menulis NIK, nomor rekening, atau data sensitif lain di kolom tulisan.'))
+  ], 'buat');
+}
+function updateBScreen() {
+  const k = S.kat; const f = k.fields[0]; const vals = FORM.bvals = FORM.bvals || {};
+  return shell([
+    topbar('📎 Cara B'),
+    h1('Isi lewat formulir Microsoft'),
+    el('p', { class: 'muted' }, 'Pilih jenis perubahan. Tiket dibuat dulu, lalu formulir Microsoft terbuka di tab baru untuk mengisi dan mengunggah dokumen.'),
+    el('div', { class: 'card' }, el('div', {}, el('label', { class: 'lbl' }, f.label, el('span', { class: 'req' }, ' *')), fieldInput(f, vals, () => render()))),
+    FORM.err ? el('div', { class: 'note rose' }, sp('⚠️'), sp(FORM.err)) : null,
+    el('button', { class: 'btn', disabled: S.busy, onclick: async () => {
+      if (!vals[f.label]) { FORM.err = 'Pilih jenis perubahan dulu'; render(); return; }
+      FORM.vals = {}; FORM.key = k.nama + '|' + S.untuk;
+      const w = window.open(S.hello.linkUpdate, '_blank', 'noopener');
+      const ok = await submitForm('link', { [f.label]: vals[f.label], 'Rincian perubahan': '(dijelaskan di formulir Microsoft)' });
+      if (ok) FORM.bvals = {}; else if (w) toast('Tiket belum terbuat, coba kirim lagi.', true);
+    } }, S.busy ? el('span', { class: 'spin' }) : 'Buat tiket dan buka formulir ↗')
+  ], 'buat');
+}
+
+/* ============ SUKSES ============ */
+function suksesScreen() {
+  const p = S.p;
+  return shell([
+    el('div', { class: 'hero', style: 'align-items:center;text-align:center;padding:30px 20px' },
+      sp('🎉', 'font-size:54px'), h1('Permintaan terkirim'), el('p', { class: 'muted' }, 'Simpan nomor tiket ini untuk memantau prosesnya.'),
+      el('div', { style: 'background:#fff;border-radius:14px;padding:10px 20px;font-size:22px;font-weight:800;color:var(--pri);letter-spacing:.5px' }, p.no)),
+    el('div', { class: 'card' },
+      kv('Layanan', p.ikon + ' ' + p.kategori), kv('Untuk satker', S.untuk), kv('Ditangani oleh', p.pic || 'Sedang ditentukan oleh LMSt'), kv('Target selesai', fmtDfull(p.target))),
+    el('button', { class: 'btn', onclick: () => openMine() }, '📋 Lihat Permintaanku'),
+    el('button', { class: 'btn sec', onclick: () => go('satker', {}, true) }, '✏️ Buat permintaan lain')
+  ], 'buat');
+}
+function kv(k, v) { return el('div', { class: 'kv' }, el('span', { class: 'k' }, k), el('span', { class: 'v' }, v)); }
+
+/* ============ PERMINTAANKU ============ */
+async function openMine() {
+  go('mine', { f: 'Semua' }, S.screen === 'mine');
+  try { const r = await api({ action: 'mine', kode: S.kode, nama: S.nama }); S.mine = r.tiket; if (S.screen === 'mine' || S.screen === 'mdetail') render(); }
+  catch (e) { toast(e.message, true); S.mine = S.mine || []; render(); }
+}
+function mineScreen() {
+  const list = S.mine;
+  const f = S.p.f || 'Semua';
+  const shown = list ? list.filter(t => f === 'Semua' || (f === 'Berjalan' ? FINAL.indexOf(t.status) < 0 : FINAL.indexOf(t.status) >= 0)) : [];
+  return shell([
+    el('div', {}, el('div', { class: 'eyebrow' }, 'LMSt ARK'), h1('Permintaanku 📋')),
+    el('div', { class: 'chips' }, ['Semua', 'Berjalan', 'Selesai dan lainnya'].map(x => { const v = x === 'Selesai dan lainnya' ? 'Tutup' : x; return el('button', { class: 'fchip' + (f === v ? ' on' : ''), onclick: () => { S.p.f = v; render(); } }, x); })),
+    list === null ? el('div', { class: 'center' }, el('span', { class: 'spin dark' })) :
+      shown.length ? el('div', { class: 'list', style: 'gap:10px' }, shown.map(t => ticketCard(t, () => go('mdetail', { no: t.no })))) :
+        el('div', { class: 'card', style: 'align-items:center;text-align:center;padding:28px' }, sp('🗒️', 'font-size:40px'), el('b', {}, 'Belum ada permintaan'), el('p', { class: 'muted small' }, 'Permintaan yang kamu buat muncul di sini.'),
+          el('button', { class: 'btn sm', onclick: () => go('satker') }, '✏️ Buat permintaan'))
+  ], 'mine');
+}
+function ticketCard(t, onclick, tim) {
+  const c = TILE[Math.abs(hash(t.kategori)) % TILE.length];
+  const ring = tim ? t.nama + ' · ' + t.untuk : (t.detail.split('\n')[0] || '').slice(0, 90);
+  return el('button', { class: 'tk', onclick },
+    el('div', { class: 't' }, el('span', { class: 'ico', style: 'background:' + c[0] }, t.ikon),
+      el('div', { style: 'flex:1;min-width:0' }, el('div', { style: 'font-weight:800' }, t.kategori), el('div', { class: 'muted small', style: 'overflow:hidden;text-overflow:ellipsis;white-space:nowrap' }, ring)),
+      statusChip(t.status)),
+    el('div', { class: 'between muted small' }, sp(t.no), sp(t.pic ? '🙋 ' + t.pic : (FINAL.indexOf(t.status) < 0 ? '⏳ Belum ada PIC' : ''))),
+    t.alasan && t.status !== 'Selesai' ? el('div', { class: 'note rose', style: 'padding:8px 11px;font-size:13px' }, sp('💬'), sp(t.alasan)) : null);
+}
+function hash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return h; }
+
+function mdetailScreen() {
+  const t = (S.mine || []).find(x => x.no === S.p.no);
+  if (!t) return shell([topbar('Tiket'), el('p', { class: 'muted' }, 'Tiket tidak ditemukan.')], 'mine');
+  const open = FINAL.indexOf(t.status) < 0;
+  return shell([
+    topbar(t.no, statusChip(t.status)),
+    el('div', { class: 'card' },
+      el('div', { style: 'display:flex;gap:12px;align-items:center' }, sp(t.ikon, 'font-size:34px'), el('div', {}, el('div', { style: 'font-weight:800;font-size:17px' }, t.kategori), el('div', { class: 'muted small' }, 'Untuk ' + t.untuk + ' · diajukan ' + fmtDT(t.waktu)))),
+      detailRows(t.detail).map(r => el('div', { class: 'kv' }, r[0] ? el('span', { class: 'k' }, r[0]) : null, el('span', { class: 'v' }, r[1])))),
+    el('div', { class: 'card' }, kv('🙋 Ditangani oleh', t.pic || 'Sedang ditentukan oleh LMSt'), kv('🎯 Target selesai', fmtDfull(t.target)), t.selesai ? kv('✅ Selesai pada', fmtDT(t.selesai)) : null),
+    t.alasan ? el('div', { class: 'note rose' }, sp('💬'), el('div', {}, el('b', {}, t.status === 'Dibatalkan' ? 'Alasan pembatalan' : 'Alasan'), el('div', {}, t.alasan))) : null,
+    t.catatan && !t.alasan ? el('div', { class: 'note blue' }, sp('💬'), el('div', {}, el('b', {}, 'Catatan tim'), el('div', {}, t.catatan))) : null,
+    timeline(t.riwayat),
+    open ? el('button', { class: 'btn warn', onclick: () => cancelSheet(t) }, '❌ Batalkan permintaan') : null
+  ], 'mine');
+}
+function timeline(r) {
+  if (!r || !r.length) return null;
+  return el('div', { class: 'card' }, el('b', {}, '🕒 Riwayat'), el('div', { class: 'tl' }, r.slice().reverse().map(h => el('div', {}, el('span', { class: 'dot' }), el('div', {}, el('div', {}, h.aksi), el('div', { class: 'muted small' }, fmtDT(h.t) + ' · ' + h.oleh))))));
+}
+function cancelSheet(t) {
+  const ta = el('textarea', { class: 'inp', rows: '2', placeholder: 'Alasan (boleh dikosongkan)' });
+  const ov = el('div', { class: 'overlay', onclick: e => { if (e.target === ov) ov.remove(); } },
+    el('div', { class: 'sheet' }, h2('Batalkan permintaan?'), el('p', { class: 'muted' }, t.kategori + ' · ' + t.no), ta,
+      el('div', { class: 'row' }, el('button', { class: 'btn soft', onclick: () => ov.remove() }, 'Tidak'),
+        el('button', { class: 'btn warn', onclick: async e => {
+          e.target.disabled = true;
+          try { const r = await api({ action: 'cancel', kode: S.kode, nama: S.nama, no: t.no, alasan: ta.value }); const i = S.mine.findIndex(x => x.no === t.no); if (i >= 0) S.mine[i] = r.tiket; ov.remove(); toast('Permintaan dibatalkan'); render(); }
+          catch (er) { toast(er.message, true); e.target.disabled = false; }
+        } }, 'Ya, batalkan'))));
+  document.body.append(ov);
+}
+
+/* ============ SAYA ============ */
+function sayaScreen() {
+  const st = SATKER_STYLE[S.satker] || ['🏢', '#DCEBFA'];
+  return shell([
+    el('div', {}, el('div', { class: 'eyebrow' }, 'LMSt ARK'), h1('Saya 🙂')),
+    el('div', { class: 'card', style: 'flex-direction:row;align-items:center;gap:14px' },
+      el('span', { class: 'av', style: 'width:56px;height:56px;background:' + st[1] + ';font-size:18px' }, initials(S.nama)), el('div', {}, el('div', { style: 'font-weight:800;font-size:17px' }, S.nama), el('div', { class: 'muted' }, S.satker))),
+    isTim() ? el('div', { class: 'note lilac' }, sp('👥'), sp('Kamu anggota tim LMSt. Tab Tim membuka papan pemantauan tiket.')) : null,
+    el('button', { class: 'btn sec', onclick: () => { if (!confirm('Keluar dari perangkat ini?')) return; LS.del('lmst_sess'); S.nama = ''; S.hello = null; S.mine = null; S.tim = null; Object.assign(LOGIN, { digits: ['', '', '', ''], ok: false, bad: '', q: '', picked: null }); go('login', {}, true); } }, 'Keluar / ganti pengguna'),
+    el('p', { class: 'muted small', style: 'text-align:center' }, 'Layanan Pegawai LMSt ARK · v2.0')
+  ], 'saya');
+}
+
+/* ============ TIM ============ */
+async function bgTim() { if (isTim() && S.pin) { try { await loadTim(true); render(); } catch (e) { S.pin = ''; } } }
+async function loadTim(silent) {
+  const r = await api({ action: 'tim_data', kode: S.kode, nama: S.nama, pin: S.pin });
+  S.tim = r; return r;
+}
+function openTim() {
+  if (S.pin) {
+    go('papan'); loadTim().then(() => { if (['papan', 'daftar', 'tdetail'].includes(S.screen)) render(); }).catch(e => { if (/PIN/.test(e.message)) { S.pin = ''; pinSheet(); } else toast(e.message, true); });
+  } else pinSheet();
+}
+function pinSheet() {
+  const inp = el('input', { class: 'inp', type: 'password', inputmode: 'numeric', placeholder: 'PIN Tim', autocomplete: 'off', style: 'text-align:center;font-size:20px;letter-spacing:6px' });
+  const err = el('p', { class: 'small', style: 'color:#86384A;min-height:18px' });
+  const ov = el('div', { class: 'overlay', onclick: e => { if (e.target === ov) ov.remove(); } },
+    el('div', { class: 'sheet' }, h2('👥 Masuk sebagai tim LMSt'), el('p', { class: 'muted' }, 'Masukkan PIN Tim untuk membuka papan pemantauan.'), inp, err,
+      el('button', { class: 'btn', onclick: async e => {
+        const b = e.currentTarget; b.disabled = true; err.textContent = '';
+        S.pin = inp.value.trim();
+        try { await loadTim(); const m = LS.get('lmst_pin') || {}; m[S.nama] = S.pin; LS.set('lmst_pin', m); ov.remove(); go('papan'); }
+        catch (er) { S.pin = ''; err.textContent = er.message; b.disabled = false; }
+      } }, 'Buka papan tim')));
+  document.body.append(ov); setTimeout(() => inp.focus(), 50);
+}
+function isOpen(t) { return FINAL.indexOf(t.status) < 0; }
+function workload(nama) { return S.tim.tiket.filter(t => t.pic === nama && isOpen(t)).length; }
+
+function papanScreen() {
+  const T = S.tim;
+  if (!T) return shell([el('div', { class: 'center' }, el('span', { class: 'spin dark' }))], 'tim');
+  const tk = T.tiket, now = new Date();
+  const noPic = tk.filter(t => isOpen(t) && !t.pic), menunggu = tk.filter(t => t.status === 'Menunggu review');
+  const bulanIni = tk.filter(t => t.status === 'Selesai' && t.selesai && dparse(t.selesai).getMonth() === now.getMonth() && dparse(t.selesai).getFullYear() === now.getFullYear());
+  const durasi = bulanIni.map(t => (dparse(t.selesai) - dparse(t.waktu)) / 864e5);
+  const avg = durasi.length ? (durasi.reduce((a, b) => a + b, 0) / durasi.length) : null;
+  const tepat = bulanIni.length ? Math.round(100 * bulanIni.filter(t => dparse(t.selesai) <= new Date(wd(t.target).getTime() + 864e5 - 1)).length / bulanIni.length) : null;
+  const tolak = tk.filter(t => t.status === 'Tidak bisa diproses' && dparse(t.waktu) >= new Date(now.getTime() - 30 * 864e5)).length;
+  const kpis = [
+    ['🆕', 'Baru', tk.filter(t => t.status === 'Baru').length, '#D9E8FA', '#1F4E8C'],
+    ['⚙️', 'Diproses', tk.filter(t => t.status === 'Diproses' || t.status === 'Menunggu review').length, '#E6DEF7', '#55388A'],
+    ['✅', 'Selesai bulan ini', bulanIni.length, '#D8F0E2', '#23603F'],
+    ['⏱️', 'Rata-rata selesai', avg == null ? '–' : avg.toFixed(1).replace('.', ',') + ' hari', '#DCEBFA', '#1F4E8C'],
+    ['🎯', 'Tepat waktu', tepat == null ? '–' : tepat + '%', '#D8F0E2', '#23603F'],
+    ['🚫', 'Tidak bisa diproses', tolak, '#F7E0E4', '#86384A']
+  ];
+  const last30 = tk.filter(t => dparse(t.waktu) >= new Date(now.getTime() - 30 * 864e5));
+  const perKat = {}; last30.forEach(t => { perKat[t.kategori] = perKat[t.kategori] || { n: 0, ikon: t.ikon }; perKat[t.kategori].n++; });
+  const katList = Object.entries(perKat).sort((a, b) => b[1].n - a[1].n).slice(0, 6);
+  const maxK = katList.length ? katList[0][1].n : 1;
+  const perSat = {}; last30.forEach(t => { perSat[t.untuk] = (perSat[t.untuk] || 0) + 1; });
+  const satColors = { DPAI: '#8DB5E0', DRPK: '#B9A7E0', DPIK: '#8FD0AA', 'Depkom ARK': '#F0B98F' };
+  const lvT = { L6: 0, L5: 0, L4: 0, L3: 0, L2: 0, L1: 0 }; T.org.forEach(o => Object.keys(lvT).forEach(l => lvT[l] += o.level[l] || 0));
+  const lvC = { L6: '#1F4E8C', L5: '#2B6CB0', L4: '#5B93CF', L3: '#8DB5E0', L2: '#B9D3EE', L1: '#DCEBFA' };
+  const totalPeg = T.org.reduce((a, o) => a + o.jumlah, 0);
+  const myLevel = T.me.level;
+  const group = lv => T.tim.filter(m => m.level === lv);
+  const grp = (lv, label, col) => group(lv).length ? el('div', { style: 'display:flex;flex-direction:column;gap:6px' }, el('span', { style: 'font-size:12px;font-weight:800;color:' + col }, label),
+    el('div', { class: 'team' }, group(lv).map(m => el('div', {}, el('span', { class: 'av', style: 'background:' + LEVEL_STYLE[lv][0] + ';color:' + LEVEL_STYLE[lv][1] }, initials(m.nama), el('span', { class: 'bd' }, workload(m.nama))), sp(m.nama))))) : null;
+  const act = [];
+  if (noPic.length) act.push(['🙋', noPic.length + ' tiket belum ada PIC', myLevel === 'L3' ? 'Tunjuk' : 'Lihat', '#F7E0E4', '#86384A', () => go('daftar', { f: 'Belum ada PIC' })]);
+  if (menunggu.length) act.push(['🔎', menunggu.length + ' tiket menunggu review', myLevel === 'L1' ? 'Lihat' : 'Review', '#FBE6D4', '#85461A', () => go('daftar', { f: 'Menunggu review' })]);
+  const peran = { L3: 'L3 · Penugas dan Reviewer', L2: 'L2 · PIC dan Reviewer', L1: 'L1 · PIC' }[myLevel] || myLevel;
+  return shell([
+    el('div', {}, el('div', { class: 'between' }, el('div', { class: 'eyebrow' }, 'LMSt ARK'), el('span', { class: 'chip', style: 'background:#DCEBFA;color:#2B6CB0' }, peran)), h1('Papan Tim 👥')),
+    el('div', { class: 'card' },
+      el('div', { class: 'between' }, sp('🏛️ Struktur Bidang ARK', 'font-weight:800;font-size:15px'), sp('per November 2026', 'font-size:12px;color:var(--muted)')),
+      el('div', { class: 'org' },
+        el('div', { class: 'top' }, el('div', { style: 'font-weight:800' }, 'Depkom ARK'), el('div', { class: 'small' }, totalPeg + ' pegawai')),
+        el('div', { class: 'vl' }), el('div', { class: 'hl' }),
+        el('div', { class: 'kids' }, T.org.map(o => { const st = SATKER_STYLE[o.satker]; return el('div', { class: 'kid' }, el('div', { class: 'vl', style: 'height:12px' }),
+          el('div', { style: 'background:' + st[1] }, sp(st[0], 'font-size:22px'), sp(o.satker, 'font-weight:800;font-size:15px'), sp(o.jumlah + ' pegawai', 'font-size:11.5px;font-weight:700'), sp(o.kepala.split(' ').slice(0, 2).join(' '), 'font-size:10.5px;color:var(--muted)'))); }))),
+      el('div', { style: 'border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px' }, sp('Komposisi per level', 'font-size:12.5px;font-weight:700'),
+        el('div', { class: 'stack' }, Object.keys(lvT).map(l => el('span', { style: 'flex:' + Math.max(lvT[l], 0.0001) + ';background:' + lvC[l] }))),
+        el('div', { class: 'legend' }, Object.keys(lvT).map(l => el('span', {}, el('i', { style: 'background:' + lvC[l] }), l + ' · ' + lvT[l]))))),
+    el('div', { class: 'card' },
+      el('div', { class: 'between' }, sp('🧑‍🤝‍🧑 Tim LMSt · ' + T.tim.length + ' orang', 'font-weight:800;font-size:15px'), sp('angka = tiket aktif', 'font-size:12px;color:var(--muted)')),
+      grp('L3', 'L3 · Kepala Bagian (penugas dan reviewer)', '#2B6CB0'), grp('L2', 'L2 · Administrator (PIC dan reviewer)', '#55388A'), grp('L1', 'L1 · Administrator (PIC)', '#1F4E8C')),
+    act.length ? el('div', { class: 'list', style: 'gap:8px' }, act.map(a => el('button', { style: 'border:0;border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;background:' + a[3] + ';color:' + a[4], onclick: a[5] }, sp(a[0], 'font-size:24px'), sp(a[1], 'flex:1;font-weight:800;text-align:left'), sp(a[2] + ' ›', 'font-weight:800')))) : el('div', { class: 'note green' }, sp('🎉'), sp('Semua tiket sudah punya PIC dan tidak ada yang menunggu review.')),
+    el('div', { class: 'kpis' }, kpis.map(k => el('div', { class: 'kpi', style: 'background:' + k[3] + ';color:' + k[4] }, sp(k[0] + ' ' + k[1], 'font-size:12.5px;font-weight:700'), el('span', { class: 'n' }, k[2])))),
+    el('div', { class: 'card' },
+      el('div', { class: 'between' }, sp('📊 Tiket per layanan', 'font-weight:800;font-size:15px'), sp('30 hari terakhir', 'font-size:12px;color:var(--muted)')),
+      katList.length ? el('div', { style: 'display:flex;flex-direction:column;gap:9px' }, katList.map(([n, v]) => el('div', { style: 'display:flex;align-items:center;gap:8px' }, sp(v.ikon + ' ' + n, 'width:150px;font-size:12.5px;font-weight:700'), el('span', { class: 'bar' }, el('i', { style: 'width:' + Math.round(100 * v.n / maxK) + '%' })), sp(v.n, 'width:24px;text-align:right;font-size:12.5px;font-weight:800')))) : el('p', { class: 'muted small' }, 'Belum ada tiket dalam 30 hari terakhir.'),
+      last30.length ? el('div', { style: 'border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px' }, sp('Asal permintaan per satker', 'font-size:12.5px;font-weight:700'),
+        el('div', { class: 'stack' }, Object.entries(perSat).map(([s, n]) => el('span', { style: 'flex:' + n + ';background:' + (satColors[s] || '#B9CDE3') }))),
+        el('div', { class: 'legend' }, Object.entries(perSat).map(([s, n]) => el('span', {}, el('i', { style: 'background:' + (satColors[s] || '#B9CDE3') }), s + ' · ' + n)))) : null),
+    el('button', { class: 'btn sec', onclick: () => go('daftar', { f: 'Semua' }) }, '🎫 Lihat semua tiket ›')
+  ], 'tim');
+}
+
+/* ----- daftar tiket ----- */
+function daftarScreen() {
+  const T = S.tim; if (!T) return shell([el('div', { class: 'center' }, el('span', { class: 'spin dark' }))], 'tim');
+  const f = S.p.f || 'Semua', sat = S.p.sat || 'Semua', q = (S.p.q || '').toLowerCase();
+  let list = T.tiket.filter(t => {
+    if (f === 'Belum ada PIC') { if (!(isOpen(t) && !t.pic)) return false; }
+    else if (f === 'Milikku') { if (t.pic !== S.nama || !isOpen(t)) return false; }
+    else if (f !== 'Semua' && t.status !== f) return false;
+    if (sat !== 'Semua' && t.untuk !== sat) return false;
+    if (q && !(t.no + ' ' + t.nama + ' ' + t.kategori + ' ' + t.pic).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  const chipsF = ['Semua', 'Milikku', 'Belum ada PIC', 'Baru', 'Diproses', 'Menunggu review', 'Selesai', 'Tidak bisa diproses', 'Dibatalkan'];
+  const search = el('input', { class: 'inp', type: 'search', placeholder: '🔎 Cari no tiket, nama, layanan…', value: S.p.q || '', oninput: e => { S.p.q = e.target.value; const pos = e.target.selectionStart; render(); const n = document.querySelector('input[type=search]'); n.focus(); n.setSelectionRange(pos, pos); } });
+  return shell([
+    el('div', { class: 'between', style: 'align-items:flex-end' }, el('div', {}, el('div', { class: 'eyebrow' }, 'LMSt ARK'), h1('Daftar tiket 🎫')),
+      el('button', { class: 'back', 'aria-label': 'Segarkan', onclick: () => { loadTim().then(() => { render(); toast('Diperbarui'); }).catch(e => toast(e.message, true)); } }, '↻')),
+    search,
+    el('div', { class: 'chips' }, chipsF.map(x => el('button', { class: 'fchip' + (f === x ? ' on' : ''), onclick: () => { S.p.f = x; render(); } }, x))),
+    el('div', { class: 'chips' }, ['Semua', 'DPAI', 'DRPK', 'DPIK', 'Depkom ARK'].map(x => el('button', { class: 'fchip' + (sat === x ? ' on' : ''), onclick: () => { S.p.sat = x; render(); } }, x))),
+    el('p', { class: 'muted small' }, list.length + ' tiket'),
+    list.length ? el('div', { class: 'list', style: 'gap:10px' }, list.map(t => ticketCard(t, () => go('tdetail', { no: t.no, back: { f, sat, q: S.p.q } }), true))) :
+      el('div', { class: 'card', style: 'align-items:center;text-align:center;padding:28px' }, sp('🗒️', 'font-size:36px'), el('b', {}, 'Tidak ada tiket'))
+  ], 'tim');
+}
+
+/* ----- detail tiket (tim) + review ----- */
+const DT = { cat: '', err: '' };
+async function timAct(no, op, extra) {
+  S.busy = true; render();
+  try {
+    const r = await api(Object.assign({ action: 'tim_act', kode: S.kode, nama: S.nama, pin: S.pin, no, op }, extra || {}));
+    const i = S.tim.tiket.findIndex(t => t.no === no); if (i >= 0) S.tim.tiket[i] = r.tiket;
+    DT.cat = ''; DT.err = ''; S.busy = false; toast('Tersimpan ✅'); render(); return true;
+  } catch (e) { S.busy = false; DT.err = e.message; render(); return false; }
+}
+function tdetailScreen() {
+  const T = S.tim; const t = T && T.tiket.find(x => x.no === S.p.no);
+  if (!t) return shell([topbar('Tiket'), el('p', { class: 'muted' }, 'Tiket tidak ditemukan.')], 'tim');
+  const m = T.me, isPic = t.pic === m.nama, isL3 = m.level === 'L3', canAct = isPic || isL3, open = isOpen(t);
+  const reviewer = (m.level === 'L2' || m.level === 'L3') && (!isPic || isL3);
+  const inReview = t.status === 'Menunggu review';
+  const body = [];
+  body.push(topbar(t.no, statusChip(t.status)));
+  body.push(el('div', { class: 'card' },
+    el('div', { style: 'display:flex;gap:12px;align-items:center' }, sp(t.ikon, 'font-size:34px'), el('div', {}, el('div', { style: 'font-weight:800;font-size:17px' }, t.kategori), el('div', { class: 'muted small' }, t.nama + ' · ' + t.untuk + ' · target ' + fmtD(t.target)))),
+    detailRows(t.detail).map(r => el('div', { class: 'kv' }, r[0] ? el('span', { class: 'k' }, r[0]) : null, el('span', { class: 'v' }, r[1])))));
+  if (inReview) {
+    body.push(el('div', { class: 'note peach' }, sp('🙋'), el('div', {}, el('b', {}, 'Diajukan review oleh ' + (t.pic || '–')), el('div', {}, lastReviewNote(t)))));
+    body.push(el('div', { class: 'note lilac' }, sp('🔎'), sp(reviewer ? 'Kamu bisa mereview tiket ini.' : 'Menunggu reviewer (L2 atau L3).')));
+  }
+  // PIC, review flag
+  const picSel = el('select', { class: 'inp', disabled: !isL3 || !open || S.busy, onchange: e => e.target.value && timAct(t.no, 'assign', { pic: e.target.value, catatan: DT.cat }) },
+    el('option', { value: '' }, t.pic ? t.pic : 'Belum ada PIC. Pilih…'),
+    T.tim.slice().sort((a, b) => (a.level === 'L3') - (b.level === 'L3')).filter(x => x.nama !== t.pic).map(x => el('option', { value: x.nama }, x.nama + ' (' + x.level + ')')));
+  body.push(el('div', { class: 'card' },
+    el('div', {}, el('label', { class: 'lbl' }, '🙋 PIC (L1 atau L2)'), picSel, !isL3 ? el('p', { class: 'muted small', style: 'margin-top:4px' }, 'Hanya L3 yang menunjuk atau mengganti PIC.') : null),
+    el('div', { class: 'between', style: 'gap:12px' }, el('div', {}, el('div', { style: 'font-weight:800' }, '🔎 Perlu review?'), el('div', { class: 'muted small' }, 'Tidak perlu untuk ruang rapat. Jika dinyalakan, ajukan ke reviewer (L2 atau L3).')),
+      el('button', { class: 'switch', role: 'switch', 'aria-checked': String(t.review === 'Ya'), 'aria-label': 'Perlu review', disabled: !(canAct && open && !inReview), onclick: () => timAct(t.no, 'review_flag', { value: t.review !== 'Ya' }) }, el('i')))));
+  if (t.reviewer) body.push(el('div', { class: 'note blue' }, sp('🔎'), sp('Reviewer: ' + t.reviewer)));
+  // catatan + aksi
+  const needNote = el('textarea', { class: 'inp', rows: '2', placeholder: inReview ? 'Terlihat oleh PIC. Isi alasan jika dikembalikan.' : 'Terlihat oleh pemohon di Permintaanku. Wajib diisi untuk Tidak bisa diproses / Batalkan.', oninput: e => { DT.cat = e.target.value; } });
+  needNote.value = DT.cat;
+  const act = [];
+  if (inReview && reviewer) {
+    act.push(el('div', { class: 'row' }, el('button', { class: 'btn soft', disabled: S.busy, onclick: () => timAct(t.no, 'review', { hasil: 'kembali', catatan: DT.cat }) }, '↩️ Kembalikan ke PIC'), el('button', { class: 'btn', disabled: S.busy, onclick: () => timAct(t.no, 'review', { hasil: 'setuju', catatan: DT.cat }) }, '✅ Setujui, selesai')));
+  } else if (open && canAct && !inReview) {
+    if (t.status === 'Baru') act.push(el('button', { class: 'btn', disabled: S.busy, onclick: () => timAct(t.no, 'start', { catatan: DT.cat }) }, '▶️ Mulai proses'));
+    else if (t.review === 'Ya') act.push(el('button', { class: 'btn', disabled: S.busy, onclick: () => timAct(t.no, 'ajukan_review', { catatan: DT.cat }) }, '🔎 Ajukan review'));
+    else act.push(el('button', { class: 'btn', disabled: S.busy, onclick: () => timAct(t.no, 'selesai', { catatan: DT.cat }) }, '✅ Tandai selesai'));
+    act.push(el('div', { class: 'row' }, el('button', { class: 'btn warn sm', disabled: S.busy, onclick: () => timAct(t.no, 'tolak', { catatan: DT.cat }) }, '🚫 Tidak bisa diproses'), el('button', { class: 'btn warn sm', disabled: S.busy, onclick: () => timAct(t.no, 'batal', { catatan: DT.cat }) }, '❌ Batalkan')));
+  } else if (!open && isL3) act.push(el('button', { class: 'btn sec', disabled: S.busy, onclick: () => timAct(t.no, 'buka_lagi') }, '↩️ Buka kembali'));
+  else if (open && !canAct && !(inReview && reviewer)) act.push(el('div', { class: 'note blue' }, sp('👀'), sp('Kamu memantau tiket ini. Hanya PIC atau L3 yang bisa mengubahnya.')));
+  if (act.length && open) body.push(el('div', { class: 'card' }, el('label', { class: 'lbl' }, inReview ? '💬 Catatan review' : '💬 Catatan tim'), needNote));
+  if (t.alasan) body.push(el('div', { class: 'note rose' }, sp('💬'), el('div', {}, el('b', {}, 'Alasan'), el('div', {}, t.alasan))));
+  if (DT.err) body.push(el('div', { class: 'note rose' }, sp('⚠️'), sp(DT.err)));
+  body.push(...act);
+  body.push(timeline(t.riwayat));
+  return shell(body, 'tim');
+}
+function lastReviewNote(t) { const h = (t.riwayat || []).slice().reverse().find(x => /Diajukan untuk review/.test(x.aksi)); return h ? h.aksi.replace('Diajukan untuk review', '').replace(/^: /, '') : ''; }
+
+const SCREENS = { login: loginScreen, satker: satkerScreen, layanan: layananScreen, form: formScreen, updatedata: updateDataScreen, updateb: updateBScreen, sukses: suksesScreen, mine: mineScreen, mdetail: mdetailScreen, saya: sayaScreen, papan: papanScreen, daftar: daftarScreen, tdetail: tdetailScreen };
+
+/* ============ MULAI ============ */
+(async function init() {
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').catch(() => {});
+  history.replaceState({ screen: 'login', p: {} }, '');
+  const sess = LS.get('lmst_sess');
+  if (sess && API) {
+    app.replaceChildren(el('div', { class: 'center', style: 'padding-top:40vh' }, el('span', { class: 'spin dark' })));
+    try {
+      S.hello = await api({ action: 'hello', kode: sess.kode });
+      const p = S.hello.pegawai.find(x => x.nama === sess.nama);
+      if (p) { S.kode = sess.kode; S.nama = p.nama; S.satker = p.satker; S.pin = (LS.get('lmst_pin') || {})[S.nama] || ''; go('satker', {}, true); bgTim(); return; }
+    } catch (e) { if (/kode/i.test(e.message)) LS.del('lmst_sess'); else LOGIN.bad = e.message; }
+  }
+  render();
+})();
+setInterval(() => { if (document.visibilityState === 'visible' && S.tim && ['papan', 'daftar'].includes(S.screen) && !document.querySelector('input:focus,textarea:focus')) loadTim().then(() => render()).catch(() => {}); }, 60000);
+</script>
+</body>
+</html>

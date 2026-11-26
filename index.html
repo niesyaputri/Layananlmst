@@ -220,7 +220,7 @@ IC.arkc = '<rect x="3" y="19" width="18" height="2.5" rx="1.2" fill="#F6B98E"/><
 
 /* ============ PENGATURAN ============
    Tempel URL Web app Google Apps Script di antara tanda kutip (lihat panduan). Harus diawali https:// */
-const API_URL = 'https://script.google.com/macros/s/AKfycbxfCXWDbbzCnmwQvurpdBvNLssmtFfqdiAt9me-n2rZ6CQHkBXsc_3oEmabPEgAMHH7dw/exec';
+const API_URL = '';
 const VERSI = '3.1.0';
 
 /* ============ BAHASA ============ */
@@ -271,13 +271,14 @@ function el(tag, props, ...kids) {
 const nn = (...a) => a.flat(Infinity).filter(x => x != null && x !== false);
 const sp = (t, s) => el('span', { style: s || '' }, t);
 function svg(name, size) {
+  if (typeof EMO !== 'undefined' && EMO[name]) return el('span', { class: 'emo', 'aria-hidden': 'true', style: 'font-size:' + Math.round((size || 22) * 0.92) + 'px;flex-shrink:0' }, EMO[name]);
   const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('aria-hidden', 'true');
   if (size) { s.setAttribute('width', size); s.setAttribute('height', size); }
   s.innerHTML = IC[name] || IC.lainnya;
   return s;
 }
-const EMO = { ruang: '🏢', hotel: '🏨', tiket: '✈️', konsumsi: '🍔', data: '🪪', update: '🪪', aset: '💻', pinjam: '📦', arsip: '📁', locker: '🔐', aksesdata: '🗂️', akses: '🚪', event: '🎉', lainnya: '💬', dpai: '🔍', drpk: '🛡️', dpik: '⚖️', lmst: '🧭', depkom: '🌐', buat: '✍️', mine: '📋', ark: '🏛️', arkc: '🏛️', tim: '👥', saya: '✨', info: '📣', cal: '📅', clock: '🕒', pin: '📌', loc: '📍', send: '📤', phone: '📞', warn: '⚠️', ban: '🚫', star: '⭐', check: '✅', gear: '⚙️', new: '🆕', doc: '📄', tool: '🛠️', city: '🏙️', key: '🔑', bulb: '💡', person: '🙋', people: '👥', lock: '🔒', eye: '👁️', mobile: '📱', bell: '🔔', target: '🎯', refresh: '🔁', chart: '📊', fire: '🔥', mail: '✉️', plate: '🍽️', suitcase: '🧳', search: '🔍', compass: '🧭', numpad: '🔢', see: '👀', globe: '🌐', shield: '🛡️', scale: '⚖️' };
+const EMO = { ruang: '🏢', hotel: '🏨', tiket: '✈️', konsumsi: '🍔', data: '🪪', update: '🪪', aset: '💻', pinjam: '📦', arsip: '📁', locker: '🔐', aksesdata: '🗂️', akses: '🚪', event: '🎉', lainnya: '💬', dpai: '🔍', drpk: '🛡️', dpik: '⚖️', lmst: '🧭', depkom: '🌐', buat: '✍️', mine: '📋', ark: '🏛️', arkc: '🏛️', tim: '👥', saya: '✨', info: '📣', cal: '📅', clock: '🕒', pin: '📌', loc: '📍', send: '📤', phone: '📞', warn: '⚠️', ban: '🚫', star: '⭐', check: '✅', gear: '⚙️', new: '🆕', doc: '📄', tool: '🛠️', city: '🏙️', key: '🔑', bulb: '💡', person: '👤', people: '👥', lock: '🔒', eye: '👁️', mobile: '📱', bell: '🔔', target: '🎯', refresh: '🔁', chart: '📊', fire: '🔥', mail: '✉️', plate: '🍽️', suitcase: '🧳', search: '🔍', compass: '🧭', numpad: '🔢', see: '👀', globe: '🌐', shield: '🛡️', scale: '⚖️' };
 const emo = name => el('span', { class: 'emo', 'aria-hidden': 'true' }, EMO[name] || '💬');
 function ic(name, bg, cls) { return el('span', { class: 'ic ' + (cls || ''), style: 'background:' + (bg || 'var(--pri-l)') }, EMO[name] ? emo(name) : svg(name)); }
 const LINE_IC = {
@@ -304,6 +305,8 @@ function statusTxt(st) { const c = STATUS[st]; return c ? L(st, c[2]) : st; }
 function statusPill(st) { const c = STATUS[st] || STATUS['Baru']; return pill(c[3] + ' ' + statusTxt(st), c[0], c[1]); }
 function avatar(nama, i, size) {
   const s = size || 44;
+  let foto = null; try { foto = S.me && nama === S.me.nama ? localStorage.getItem('lmst_foto') : null; } catch (e) {}
+  if (foto) return el('img', { class: 'av', src: foto, alt: '', style: `width:${s}px;height:${s}px;object-fit:cover;padding:0` });
   return el('span', { class: 'av', style: `width:${s}px;height:${s}px;background:${AV_BG[(i || 0) % AV_BG.length]};font-size:${Math.round(s * .38)}px` }, (nama || '?').trim()[0].toUpperCase());
 }
 function short(n) { return String(n || '').trim().split(/\s+/)[0]; }
@@ -365,7 +368,7 @@ window.addEventListener('popstate', e => {
 function saveSess() { LS.set('lmst3_sess', { nama: S.nama, kode: S.kode, me: S.me, boot: S.boot }); }
 function logout(expired) {
   S.nama = ''; S.kode = ''; S.me = null; S.boot = null; S.mine = null; S.tim = null; S.pinKabag = '';
-  LS.del('lmst3_sess');
+  LS.del('lmst3_sess'); try { localStorage.removeItem('lmst_foto'); } catch (e) {}
   go('login', {}, true);
   if (expired) toast(L('Sesi berakhir. Silakan masuk lagi.', 'Session ended. Please sign in again.'), true);
 }
@@ -887,6 +890,26 @@ function waList(list, title) {
   return out.join('\n');
 }
 
+function fotoPicker(m) {
+  let ada = false; try { ada = !!localStorage.getItem('lmst_foto'); } catch (e) {}
+  const inp = el('input', { type: 'file', accept: 'image/*', style: 'display:none', onchange: e => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    const img = new Image(); const url = URL.createObjectURL(f);
+    img.onload = () => {
+      const n = 240, c = document.createElement('canvas'); c.width = c.height = n;
+      const k = Math.min(img.width, img.height), sx = (img.width - k) / 2, sy = (img.height - k) / 2;
+      c.getContext('2d').drawImage(img, sx, sy, k, k, 0, 0, n, n); URL.revokeObjectURL(url);
+      try { localStorage.setItem('lmst_foto', c.toDataURL('image/jpeg', 0.85)); render(); toast(L('Foto tersimpan 📸', 'Photo saved 📸')); } catch (err) { toast(L('Foto terlalu besar', 'Photo too large')); }
+    };
+    img.onerror = () => toast(L('Foto tidak bisa dibaca', 'Cannot read photo'));
+    img.src = url;
+  } });
+  return el('div', { class: 'stack', style: 'align-items:center;gap:4px' },
+    el('button', { type: 'button', 'aria-label': L('Ganti foto', 'Change photo'), style: 'border:0;background:none;padding:0;position:relative;cursor:pointer', onclick: () => inp.click() },
+      avatar(m.nama, 3, 60), el('span', { style: 'position:absolute;right:-4px;bottom:-2px;width:26px;height:26px;border-radius:99px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;font-size:14px' }, '📷'), inp),
+    ada ? el('button', { type: 'button', class: 'small', style: 'border:0;background:none;color:var(--muted);text-decoration:underline;padding:0;cursor:pointer', onclick: () => { try { localStorage.removeItem('lmst_foto'); } catch (e) {} render(); } }, L('Hapus foto', 'Remove')) : null);
+}
+
 /* ============ PERMINTAANKU ============ */
 async function loadMine() { const r = await api({ action: 'mine' }); S.mine = r.tiket; if (r.info && S.boot) S.boot.info = r.info; return r; }
 function openMine() { go('mine'); }
@@ -1019,7 +1042,7 @@ function sayaScreen() {
   const row = (icon, bg, t, s, fn) => el('button', { class: 'item', onclick: fn }, ic(icon, bg, 'sm'), el('div', { class: 'grow stack', style: 'gap:1px' }, el('b', { style: 'font-size:14.5px' }, t), s ? el('span', { class: 'hint' }, s) : null), lic('chev', 18));
   return shell([
     el('h1', { class: 'h1' }, L('Saya', 'Me') + ' ✨'),
-    el('div', { class: 'card', style: 'flex-direction:row;align-items:center' }, avatar(m.nama, 3, 56),
+    el('div', { class: 'card', style: 'flex-direction:row;align-items:center' }, fotoPicker(m),
       el('div', { class: 'grow stack', style: 'gap:2px' }, el('span', { class: 'fr', style: 'font-size:19px' }, m.nama), el('span', { class: 'hint' }, m.satker + (m.level ? ' · ' + m.level : '') + (m.tim ? L(' · Tim LMSt ARK', ' · LMSt ARK team') : '')))),
     el('div', { class: 'card', style: 'flex-direction:row;align-items:center' }, ic('globe', 'var(--pri-l)', 'sm'), el('b', { class: 'grow' }, L('Bahasa', 'Language')), langToggle()),
     el('div', { class: 'list' },

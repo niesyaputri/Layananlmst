@@ -221,7 +221,7 @@ IC.arkc = '<rect x="3" y="19" width="18" height="2.5" rx="1.2" fill="#F6B98E"/><
 /* ============ PENGATURAN ============
    Tempel URL Web app Google Apps Script di antara tanda kutip (lihat panduan). Harus diawali https:// */
 const API_URL = 'https://script.google.com/macros/s/AKfycbxfCXWDbbzCnmwQvurpdBvNLssmtFfqdiAt9me-n2rZ6CQHkBXsc_3oEmabPEgAMHH7dw/exec';
-const VERSI = '3.4.0';
+const VERSI = '3.5.0';
 
 /* ============ BAHASA ============ */
 let LANG = (() => { try { return localStorage.getItem('lmst_lang') || 'id'; } catch (e) { return 'id'; } })();
@@ -278,7 +278,7 @@ function svg(name, size) {
   s.innerHTML = IC[name] || IC.lainnya;
   return s;
 }
-const EMO = { ruang: '🏢', hotel: '🏨', tiket: '✈️', konsumsi: '🍔', data: '🪪', update: '🪪', kebutuhan: '☕', jemput: '🚘', konsultasi: '🗓️', aset: '💻', pinjam: '📦', arsip: '📁', locker: '🔐', aksesdata: '🗂️', akses: '🚪', event: '🎉', lainnya: '💬', dpai: '🔍', drpk: '🛡️', dpik: '⚖️', lmst: '🧭', depkom: '🌐', buat: '📝', mine: '📋', ark: '🏛️', arkc: '🏛️', infoark: '📚', tim: '👥', saya: '✨', info: '📣', cal: '📅', clock: '🕒', pin: '📌', loc: '📍', send: '📤', phone: '📞', warn: '⚠️', ban: '🚫', star: '⭐', check: '✅', gear: '⚙️', new: '🆕', doc: '📄', tool: '🛠️', city: '🏙️', key: '🔑', bulb: '💡', person: '👤', people: '👥', lock: '🔒', eye: '👁️', mobile: '📱', bell: '🔔', target: '🎯', refresh: '🔁', chart: '📊', fire: '🔥', mail: '✉️', plate: '🍽️', suitcase: '🧳', search: '🔍', compass: '🧭', numpad: '🔢', see: '👀', globe: '🌐', shield: '🛡️', scale: '⚖️' };
+const EMO = { ruang: '🏢', hotel: '🏨', tiket: '✈️', konsumsi: '🍔', data: '🪪', update: '🪪', kebutuhan: '☕', jemput: '🚘', konsultasi: '🗓️', aset: '💻', pinjam: '📦', arsip: '📁', locker: '🔐', aksesdata: '🗂️', akses: '🚪', event: '🎉', lainnya: '💬', dpai: '🔍', drpk: '🛡️', dpik: '⚖️', lmst: '🧭', depkom: '🌐', buat: '📝', mine: '📋', ark: '🏛️', arkc: '🏛️', infoark: '📚', tim: '👥', saya: '✨', info: '📣', cal: '📅', clock: '🕒', pin: '📌', loc: '📍', send: '📤', phone: '📞', warn: '⚠️', ban: '🚫', star: '⭐', check: '✅', gear: '⚙️', new: '🆕', doc: '📄', tool: '🛠️', city: '🏙️', key: '🔑', bulb: '💡', person: '👤', people: '👥', lock: '🔒', eye: '👁️', mobile: '📱', bell: '🔔', target: '🎯', refresh: '🔁', chart: '📊', fire: '🔥', mail: '✉️', plate: '🍽️', suitcase: '🧳', search: '🔍', compass: '🧭', cake: '🎂', medal: '🏅', glow: '🌟', party: '🎉', chat: '💬', tent: '🎪', numpad: '🔢', see: '👀', globe: '🌐', shield: '🛡️', scale: '⚖️' };
 const emo = name => el('span', { class: 'emo', 'aria-hidden': 'true' }, EMO[name] || '💬');
 function ic(name, bg, cls) { return el('span', { class: 'ic ' + (cls || ''), style: 'background:' + (bg || 'var(--pri-l)') }, EMO[name] ? emo(name) : svg(name)); }
 const LINE_IC = {
@@ -355,7 +355,7 @@ function toast(msg, err) {
   document.body.append(t); clearTimeout(toastT); toastT = setTimeout(() => t.remove(), err ? 4800 : 2600);
 }
 function go(screen, p, replace) {
-  S.screenPrev = S.screen; S.screen = screen; S.p = p || {};
+  S.screenPrev = S.screen; S.screen = screen; S.p = p || {}; S.komFirst = null;
   document.querySelectorAll('.toast').forEach(x => x.remove());
   const st = { screen, p: S.p };
   if (replace) history.replaceState(st, ''); else history.pushState(st, '');
@@ -405,7 +405,7 @@ function nav(active) {
     const on = k === active;
     let badge = null;
     if (k === 'tim' && S.tim) { const n = timBadge(); if (n) badge = el('span', { class: 'badge' }, n > 99 ? '99+' : n); }
-    if (k === 'mine') { const n = mineChanged().length; if (n) badge = el('span', { class: 'badge', 'aria-label': n + L(' kabar baru', ' updates') }, n > 99 ? '99+' : n); }
+    if (k === 'mine') { const ch = mineChanged().map(t => t.no); const n = ch.length + (S.mine || []).filter(t => komUnread(t) && ch.indexOf(t.no) < 0).length; if (n) badge = el('span', { class: 'badge', 'aria-label': n + L(' kabar baru', ' updates') }, n > 99 ? '99+' : n); }
     return el('button', { class: on ? 'on' : '', 'aria-current': on ? 'page' : null, onclick: () => go(target[k]) }, el('span', { class: 'pillic' }, emo(i)), el('span', {}, t), badge);
   }));
 }
@@ -1029,7 +1029,7 @@ function mineScreen() {
     const list = all.filter(t => f === 'semua' ? true : f === 'aktif' ? FINAL.indexOf(t.status) < 0 : FINAL.indexOf(t.status) >= 0);
     if (!S.baruNos) { S.baruNos = mineChanged().map(t => t.no); markSeen(); const b = document.querySelector('body > nav.nav .badge-mine, body > nav.nav button:nth-child(3) .badge'); if (b) b.remove(); }
     const baru = all.filter(t => S.baruNos.includes(t.no));
-    const tag = t => S.baruNos.includes(t.no) ? pill('🔔 ' + L('Ada kabar baru', 'New update'), '#FFE6D9', '#8A4B1F') : null;
+    const tag = t => S.baruNos.includes(t.no) ? pill('🔔 ' + L('Ada kabar baru', 'New update'), '#FFE6D9', '#8A4B1F') : komTag(t);
     box.replaceChildren(...nn(
       baru.length ? el('div', { class: 'note', style: 'background:#FFF1E6;color:#7A4319;font-weight:700' }, '🔔 ' + baru.length + L(' permintaan ada kabar baru', ' requests have updates')) : null,
       baru.length && f !== 'semua' ? baru.filter(t => !list.includes(t)).map(t => ticketItem(t, () => go('mdetail', { no: t.no }), tag(t))) : null,
@@ -1085,6 +1085,7 @@ function mdetailScreen() {
       el('div', { class: 'row', style: 'flex-wrap:wrap;gap:6px' }, statusPill(t.status), t.pic ? pill('🙋 PIC: ' + t.pic.split(',').map(short).join(', '), 'var(--pri-l)', 'var(--pri-d)') : pill(t.tim ? '👥 ' + L('Menunggu tim ', 'Waiting for team ') + t.untuk : L('Menunggu PIC', 'Waiting for PIC'), '#EEF1F5', '#52657F')),
       t.alasan ? el('div', { class: 'note red' }, svg('ban', 20), el('span', {}, t.alasan)) : null,
       t.catatan ? el('div', { class: 'note blue' }, svg('mail', 20), el('span', {}, t.catatan)) : null),
+    komCard(t, false),
     rateBox,
     el('div', { class: 'card', style: 'gap:0' }, el('span', { class: 'sec', style: 'margin-bottom:6px' }, '📝 ' + L('Isian', 'Details')), rows),
     el('div', { class: 'card' }, el('span', { class: 'sec' }, '🕒 ' + L('Riwayat', 'History')), el('div', { class: 'tl' }, t.riwayat.slice().reverse().map(h => el('div', { class: 'ev' }, el('span', { class: 'dot' }), el('div', { class: 'stack', style: 'gap:1px' }, el('b', {}, h.aksi), el('span', { class: 'small' }, h.oleh + ' · ' + fmtDT(h.t))))))),
@@ -1161,8 +1162,10 @@ function sayaScreen() {
       el('div', { class: 'grow stack', style: 'gap:2px' }, el('span', { class: 'fr', style: 'font-size:19px' }, m.nama), el('span', { class: 'hint' }, m.satker + (m.level ? ' · ' + m.level : '') + (m.tim ? L(' · Tim LMSt ARK', ' · LMSt ARK team') : '')))),
     el('div', { class: 'card', style: 'flex-direction:row;align-items:center' }, ic('globe', 'var(--pri-l)', 'sm'), el('b', { class: 'grow' }, L('Bahasa', 'Language')), langToggle()),
     el('div', { class: 'list' },
+      row('party', '#FFE6D9', L('Kabar baik', 'Good news'), L('Atur ucapan ulang tahun, penghargaan, promosi', 'Birthday, award and promotion settings'), () => go('izin')),
       row('key', '#FFF4D6', L('Ganti kode akses', 'Change access code'), null, gantiKode),
       m.tim ? row('info', '#FFF4D6', L('Kelola Info LMSt ARK', 'Manage LMSt ARK info'), L('WFH, libur, pengumuman', 'WFH, holidays, announcements'), () => go('kelolainfo')) : null,
+      m.tim ? row('tent', '#EEEAFE', L('Kelola Kabar & Event', 'Manage News & Events'), L('Kalender event, penghargaan, promosi', 'Event calendar, awards, promotions'), () => go('kelolaark')) : null,
       m.kabag ? row('lock', '#FFE6D9', L('Reset kode akses pegawai', 'Reset employee codes'), L('Khusus Kepala Bagian', 'Head of Subdivision only'), () => withKabag(() => go('resetkode'))) : null,
       row('shield', '#E0EEFF', L('Privasi & keamanan', 'Privacy & security'), L('Data apa yang disimpan dan siapa yang melihat', 'What is stored and who can see it'), () => go('privasi')),
       row('ban', '#FCE4EA', L('Keluar', 'Sign out'), L('Perangkat ini lupa namamu', 'This device forgets you'), () => logout())),
@@ -1187,7 +1190,9 @@ function privasiScreen() {
       L('Disimpan di Google Sheet yang dikelola LMSt ARK, dicadangkan otomatis setiap minggu.', 'Stored in a Google Sheet managed by LMSt ARK and backed up weekly.')]),
     sec('👀', L('Siapa yang bisa melihat', 'Who can see it'), [
       L('Permintaanmu hanya terlihat olehmu dan tim LMSt ARK. Pegawai lain tidak bisa melihatnya.', 'Your requests are visible only to you and the LMSt ARK team. Other employees cannot see them.'),
-      L('WhatsApp hanya terbuka kalau kamu sendiri menekan tombol Bagikan.', 'WhatsApp opens only when you tap Share.')]),
+      L('WhatsApp hanya terbuka kalau kamu sendiri menekan tombol Bagikan.', 'WhatsApp opens only when you tap Share.'),
+      L('Percakapan di tiket hanya terlihat olehmu dan tim LMSt ARK.', 'Ticket chats are visible only to you and the LMSt ARK team.'),
+      L('Kabar baik (ulang tahun, penghargaan, promosi) hanya tampil kalau kamu sendiri menyalakannya di menu Saya. Ulang tahun disimpan tanggal dan bulan saja.', 'Good news (birthday, award, promotion) shows only if you turn it on in Me. Birthdays are stored as day and month only.')]),
     sec('🔑', L('Kode akses', 'Access code'), [
       L('Kode disimpan dalam bentuk teracak. Tim LMSt ARK pun tidak bisa melihat kodemu.', 'Your code is stored scrambled (hashed). Even the LMSt ARK team cannot see it.'),
       L('Salah memasukkan kode berkali-kali akan dikunci sementara.', 'Too many wrong attempts lock sign-in for a while.'),
@@ -1248,6 +1253,8 @@ function infoArkScreen() {
   const info = (S.boot && S.boot.info) || [];
   const res = el('div', { class: 'stack', style: 'gap:10px' });
   const main = el('div', { class: 'stack', style: 'gap:14px' });
+  const feedBox = el('div', { class: 'stack', style: 'gap:14px' });
+  feedSections(feedBox);
   const search = el('input', { class: 'in', type: 'search', value: S.p.q || '', placeholder: L('Cari info, misalnya "rumah sakit" atau "cuti"', 'Search, e.g. "hospital" or "leave"'), 'aria-label': L('Cari info', 'Search info'),
     oninput: () => { S.p.q = search.value; fill(); } });
   const fill = () => {
@@ -1266,6 +1273,7 @@ function infoArkScreen() {
   main.replaceChildren(...nn(
     el('span', { class: 'sec' }, '📣 ' + L('Pengumuman', 'Announcements')),
     info.length ? infoCarousel(info) : el('div', { class: 'card', style: 'padding:14px' }, el('span', { class: 'hint' }, L('Belum ada pengumuman.', 'No announcements yet.'))),
+    feedBox,
     el('span', { class: 'sec' }, '📚 ' + L('Info tetap', 'Reference info')),
     TETAP_KAT.map(k => el('button', { class: 'card', style: 'flex-direction:row;align-items:center;gap:12px;padding:12px;text-align:left;cursor:pointer;font-family:inherit;color:var(--ink)', onclick: () => go('itkat', { k: k[0] }) },
       el('span', { class: 'ic', style: 'background:' + k[3] + ';width:50px;height:50px;border-radius:16px' }, el('span', { class: 'emo', style: 'font-size:27px' }, k[2])),
@@ -1332,7 +1340,8 @@ const poolOf = t => String(t.tim || '').split(',').map(x => x.trim()).filter(Boo
 const isOpen = t => FINAL.indexOf(t.status) < 0;
 function poolForMe(list) { return list.filter(t => isOpen(t) && !picsOf(t).length && poolOf(t).includes(S.me.nama)); }
 function needDispo(list) { return list.filter(t => isOpen(t) && !picsOf(t).length && !poolOf(t).length); }
-function timBadge() { if (!S.tim) return 0; const tk = S.tim.tiket; return poolForMe(tk).length + (S.me.kabag ? needDispo(tk).length : 0); }
+function timBadge() { if (!S.tim) return 0; const tk = S.tim.tiket; return poolForMe(tk).length + (S.me.kabag ? needDispo(tk).length : 0) + komMineTim().length; }
+function komMineTim() { return S.tim ? S.tim.tiket.filter(t => komUnread(t) && (picsOf(t).includes(S.me.nama) || (!picsOf(t).length && poolOf(t).includes(S.me.nama)))) : []; }
 const timIdx = n => Math.max(0, (S.tim ? S.tim.tim : []).findIndex(x => x.nama === n));
 function withKabag(fn) {
   if (S.pinKabag) return fn();
@@ -1382,7 +1391,10 @@ function papanScreen() {
         el('button', { class: 'btn line', onclick: () => go('rekap') }, svg('chart', 20), L('Rekap', 'Recap')),
         el('button', { class: 'btn wa', onclick: () => waOpen(waList(tk.filter(isOpen), L('Tiket aktif · Layanan LMSt ARK', 'Open tickets · LMSt ARK'))) }, lic('wa'), 'WhatsApp'),
         el('button', { class: 'btn line', onclick: () => go('kelolainfo') }, svg('info', 20), L('Info', 'Info')),
-        el('button', { class: 'btn line', style: 'grid-column:1/-1;background:#FFF1E6;border-color:#FBE0CC', onclick: () => go('sarantim') }, '💌 ' + L('Saran dan masukan', 'Feedback') + (S.tim.saranBaru ? ' · ' + S.tim.saranBaru + L(' baru', ' new') : ''))),
+        el('button', { class: 'btn line', style: 'grid-column:1/-1;background:#FFF1E6;border-color:#FBE0CC', onclick: () => go('sarantim') }, '💌 ' + L('Saran dan masukan', 'Feedback') + (S.tim.saranBaru ? ' · ' + S.tim.saranBaru + L(' baru', ' new') : '')),
+        el('button', { class: 'btn line', style: 'grid-column:1/-1;background:#EEEAFE;border-color:#E2DCFB', onclick: () => go('kelolaark') }, '🎉 ' + L('Kabar baik & Kalender Event', 'Good news & Event calendar'))),
+      komMineTim().length ? el('div', { class: 'stack', style: 'gap:8px' }, el('span', { class: 'sec' }, '💬 ' + L('Ada balasan baru', 'New replies') + ' (' + komMineTim().length + ')'),
+        el('div', { class: 'list' }, komMineTim().slice(0, 4).map(t => ticketItem(t, () => go('tdetail', { no: t.no }), komTag(t))))) : null,
       dispo.length ? el('button', { class: 'item', style: 'background:#FFF4D6;border-color:#F5DFA0', onclick: () => go('daftar', { f: 'dispo' }) }, ic('target', '#fff'),
         el('div', { class: 'grow stack', style: 'gap:2px' }, el('b', {}, '🎯 ' + dispo.length + L(' tiket menunggu disposisimu', ' tickets need your assignment')), el('span', { class: 'hint' }, L('LMSt ARK, Depkom ARK, dan layanan manual', 'LMSt ARK, Depkom ARK and manual services'))), lic('chev', 18)) : null,
       mine.length ? el('div', { class: 'stack', style: 'gap:8px' }, el('span', { class: 'sec' }, '💪 ' + L('Bisa kamu kerjakan', 'Ready for you') + ' (' + mine.length + ')'),
@@ -1469,7 +1481,7 @@ function daftarScreen() {
     if (s) list = list.filter(t => [t.no, t.nama, t.kategori, t.untuk, t.pic, t.detail].join(' ').toLowerCase().includes(s));
     const c = st => list.filter(t => t.status === st).length;
     sum.replaceChildren(list.length ? el('div', { class: 'note blue', style: 'font-weight:700;font-size:12.5px;padding:9px 12px' }, '📊 ' + list.length + L(' tiket', ' tickets') + ' · ✅ ' + c('Selesai') + ' · ⏳ ' + (c('Diproses') + c('Menunggu review')) + ' · 🆕 ' + c('Baru')) : '');
-    box.replaceChildren(...(list.length ? list.slice(0, 300).map(t => ticketItem(t, () => go('tdetail', { no: t.no }), (isOpen(t) && !picsOf(t).length && poolOf(t).includes(S.me.nama)) ? ambilBtn(t) : isLate(t) ? pill('⏰ ' + L('Lewat target', 'Past target'), '#FCE4EA', '#8E3049') : null)) : [el('div', { class: 'empty' }, ic('check', 'var(--mint)', 'lg'), L('Tidak ada tiket di sini.', 'No tickets here.'))]));
+    box.replaceChildren(...(list.length ? list.slice(0, 300).map(t => ticketItem(t, () => go('tdetail', { no: t.no }), (isOpen(t) && !picsOf(t).length && poolOf(t).includes(S.me.nama)) ? ambilBtn(t) : komUnread(t) ? komTag(t) : isLate(t) ? pill('⏰ ' + L('Lewat target', 'Past target'), '#FCE4EA', '#8E3049') : null)) : [el('div', { class: 'empty' }, ic('check', 'var(--mint)', 'lg'), L('Tidak ada tiket di sini.', 'No tickets here.'))]));
     shareB.onclick = () => waOpen(waList(list, L('Daftar tiket · Layanan LMSt ARK', 'Tickets · LMSt ARK')));
   };
   ensureTim(fill);
@@ -1512,6 +1524,7 @@ function tdetailScreen() {
       B(L('Tidak bisa diproses', 'Cannot process'), 'rose', b => askText(L('Tidak bisa diproses', 'Cannot process'), L('Alasan (dilihat pemohon)', 'Reason (requester sees it)'), true, c => doAct(b, t, 'tolak', { catatan: c }), 'rose'));
     }
     if (!open && me.kabag) B(L('Buka kembali', 'Reopen'), 'line', b => withKabag(() => doAct(b, t, 'buka_lagi')));
+    if (t.kode === 'event') B('📅 ' + L('Masukkan ke Kalender Event', 'Add to Event Calendar'), 'soft', () => eventDariTiket(t));
     B(L('Tambah catatan', 'Add note'), 'line', b => askText(L('Catatan tim', 'Team note'), L('Catatan (terlihat pemohon)', 'Note (visible to requester)'), true, c => doAct(b, t, 'catatan', { catatan: c })));
     const rows = lineList(t.detail).map(l => { const i = l.indexOf(': '); return i > 0 ? kv(l.slice(0, i), kvVal(l.slice(i + 2))) : kv('', l); });
     box.replaceChildren(...nn(
@@ -1525,6 +1538,7 @@ function tdetailScreen() {
         t.alasan ? el('div', { class: 'note red' }, svg('ban', 20), el('span', {}, t.alasan)) : null,
         t.catatan ? el('div', { class: 'note blue' }, svg('mail', 20), el('span', {}, t.catatan)) : null),
       el('div', { class: 'stack' }, A),
+      komCard(t, true),
       el('div', { class: 'card', style: 'gap:0' }, el('span', { class: 'sec', style: 'margin-bottom:6px' }, L('Isian', 'Details')), rows),
       t.rating ? el('div', { class: 'card' }, el('span', { class: 'sec' }, L('Rating pemohon', 'Requester rating')), el('div', { class: 'row', style: 'gap:2px' }, Array.from({ length: t.rating }, () => svg('star', 20))), t.komentar ? el('span', { class: 'hint' }, '“' + t.komentar + '”') : null) : null,
       el('div', { class: 'card' }, el('span', { class: 'sec' }, L('Riwayat', 'History')), el('div', { class: 'tl' }, t.riwayat.slice().reverse().map(h => el('div', { class: 'ev' }, el('span', { class: 'dot' }), el('div', { class: 'stack', style: 'gap:1px' }, el('b', {}, h.aksi, h.pub ? null : el('span', { class: 'small' }, L(' · internal', ' · internal'))), el('span', { class: 'small' }, h.oleh + ' · ' + fmtDT(h.t))))))),
@@ -1789,13 +1803,302 @@ function downloadDoc(R) {
   document.body.append(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
 }
 
+/* ============ v3.5 PERCAKAPAN TIKET ============ */
+const KOM = {};
+function komSeenKey() { return 'lmst_kom_' + (S.me ? S.me.nama : ''); }
+function komSeen(no) { return (LS.get(komSeenKey()) || {})[no] || 0; }
+function komMarkSeen(no, n) { const s = LS.get(komSeenKey()) || {}; s[no] = n; LS.set(komSeenKey(), s); }
+function komOthers(t) { return (t.kom || 0) - ((t.komWho || {})[S.me.nama] || 0); }
+function komUnread(t) { if (!t || !t.kom || !S.me) return 0; return Math.max(0, komOthers(t) - komSeen(t.no)); }
+function komTag(t) { const n = komUnread(t); return n ? pill('💬 ' + n + L(' balasan baru', ' new'), '#FFE6D9', '#8A4B1F') : null; }
+function dayLabel(d) { return d === todayISO() ? L('Hari ini', 'Today') : d === isoPlus(-1) ? L('Kemarin', 'Yesterday') : fmtD(d, true); }
+function syncKom(no, list) {
+  [S.mine, S.tim && S.tim.tiket].forEach(arr => (arr || []).forEach(x => { if (x.no === no) { x.kom = list.length; x.komBy = list.length ? list[list.length - 1].nama : ''; x.komWho = {}; list.forEach(k => { x.komWho[k.nama] = (x.komWho[k.nama] || 0) + 1; }); } }));
+}
+function komCard(t, isTeam) {
+  const closed = FINAL.indexOf(t.status) >= 0;
+  const seenBefore = (S.komFirst && S.komFirst.no === t.no) ? S.komFirst.n : (S.komFirst = { no: t.no, n: komSeen(t.no) }).n;
+  const listBox = el('div', { class: 'stack', style: 'gap:8px', 'aria-live': 'polite' });
+  const draw = list => {
+    if (!list) { listBox.replaceChildren(loadingBox()); return; }
+    if (!list.length) { listBox.replaceChildren(el('span', { class: 'hint', style: 'font-size:13px' }, closed ? L('Tidak ada percakapan di tiket ini.', 'No messages on this ticket.') : isTeam ? L('Belum ada pesan. Perlu menanyakan sesuatu ke pemohon? Tulis di bawah.', 'No messages yet. Need to ask the requester something? Write below.') : L('Belum ada pesan. Ada yang perlu ditanyakan atau diubah? Tulis ke PIC di bawah.', 'No messages yet. Anything to ask or change? Write to the PIC below.'))); return; }
+    let lastDay = '', oth = 0;
+    const out = [];
+    list.forEach(k => {
+      const day = k.t.slice(0, 10);
+      if (day !== lastDay) { lastDay = day; out.push(el('div', { style: 'align-self:center;font-size:11px;font-weight:800;color:var(--muted2);background:var(--pri-l);border-radius:99px;padding:3px 10px' }, dayLabel(day))); }
+      const mine = k.nama === S.me.nama, isNew = !mine && oth++ >= seenBefore;
+      out.push(el('div', { style: mine ? 'align-self:flex-end;max-width:85%;background:var(--pri);color:#fff;border-radius:18px 18px 6px 18px;padding:9px 12px' : 'align-self:flex-start;max-width:85%;background:#fff;border:' + (isNew ? '2px solid #9DBDF7' : '1px solid var(--line)') + ';border-radius:18px 18px 18px 6px;padding:9px 12px' },
+        mine ? null : el('div', { class: 'row', style: 'gap:6px' }, el('span', { style: 'font-size:11.5px;font-weight:800;color:var(--pri-d)' }, short(k.nama) + (k.tim ? ' · LMSt ARK' : isTeam ? L(' · pemohon', ' · requester') : '')), isNew ? pill(L('Baru', 'New'), '#B4365A', '#fff') : null),
+        el('div', { style: 'font-size:14px;line-height:1.42;white-space:pre-wrap;word-break:break-word' }, k.isi),
+        el('div', { style: 'font-size:10.5px;margin-top:3px;text-align:right;opacity:.85' }, (mine && isTeam ? short(k.nama) + ' · ' : '') + k.t.slice(11, 16))));
+    });
+    listBox.replaceChildren(...out);
+    komMarkSeen(t.no, oth);
+    const nv = document.querySelector('body > nav.nav'); if (nv && ['mdetail', 'tdetail'].includes(S.screen)) nv.replaceWith(nav(S.screen === 'tdetail' ? 'tim' : 'mine'));
+  };
+  draw(KOM[t.no] || null);
+  api({ action: 'komentar', no: t.no }).then(r => { KOM[t.no] = r.list; syncKom(t.no, r.list); if (listBox.isConnected) draw(r.list); }).catch(e => { if (listBox.isConnected) listBox.replaceChildren(el('span', { class: 'hint' }, e.message)); });
+  let foot;
+  if (closed) foot = el('div', { class: 'note blue', style: 'font-size:12.5px' }, '🔒', el('span', {}, L('Percakapan ditutup karena tiket sudah ', 'Chat is closed because the ticket is ') + statusTxt(t.status).toLowerCase() + '.'));
+  else {
+    const ta = el('textarea', { class: 'in', id: 'komin', rows: 2, maxlength: '500', placeholder: L('Tulis pesan…', 'Write a message…'), style: 'min-height:50px;flex:1' });
+    const send = el('button', { class: 'btn', 'aria-label': L('Kirim pesan', 'Send message'), style: 'width:52px;min-height:50px;padding:0;flex:none;font-size:19px', onclick: () => busy(send, async () => {
+      const isi = ta.value.trim(); if (!isi) throw new Error(L('Tulis pesannya dulu ya', 'Write a message first'));
+      const r = await api({ action: 'komentar_kirim', no: t.no, isi }); ta.value = ''; KOM[t.no] = r.list; syncKom(t.no, r.list); draw(r.list);
+    }) }, '➤');
+    const quick = isTeam ? [L('🙏 Mohon konfirmasi tanggalnya', '🙏 Please confirm the date'), L('👥 Jumlah pesertanya berapa?', '👥 How many participants?'), L('✅ Siap, sedang kami proses', '✅ Noted, we are on it')]
+      : [L('👍 Oke, terima kasih', '👍 OK, thank you'), L('📅 Tanggalnya berubah', '📅 The date has changed'), L('🙏 Baik, segera saya kirim', '🙏 Sure, sending it soon')];
+    foot = el('div', { class: 'stack', style: 'gap:8px' },
+      el('div', { class: 'tabs' }, quick.map(q => el('button', { class: 'tab', style: 'font-size:12.5px;min-height:40px', onclick: () => { ta.value = q; ta.focus(); } }, q))),
+      el('label', { class: 'lbl', for: 'komin', style: 'position:absolute;left:-9999px' }, L('Pesan', 'Message')),
+      el('div', { class: 'row', style: 'gap:8px;align-items:flex-end' }, ta, send),
+      el('span', { class: 'hint' }, '🔒 ' + L('Jangan tulis data pribadi atau rahasia. Pesan bisa dibaca pemohon dan seluruh tim LMSt ARK.', 'Do not write personal or confidential data. Messages are visible to the requester and the whole LMSt ARK team.')));
+  }
+  return el('div', { class: 'card', id: 'percakapan' }, el('div', { class: 'between' }, el('span', { class: 'sec' }, '💬 ' + L('Percakapan', 'Chat')), el('span', { class: 'small' }, isTeam ? L('👀 Dibaca pemohon', '👀 Requester sees this') : L('👀 Dibaca tim LMSt ARK', '👀 LMSt ARK team sees this'))), listBox, foot);
+}
+
+/* ============ v3.5 KABAR BAIK & KALENDER EVENT ============ */
+const KABAR_ST = {
+  'Ulang tahun': ['🎂', '#FFE6D9', '#8A3A15', 'Ulang tahun hari ini', 'Birthday today'],
+  'Penghargaan': ['🏅', '#DDF4EA', '#1F6E55', 'Penghargaan', 'Award'],
+  'Promosi': ['🌟', '#EEEAFE', '#4B3DB0', 'Promosi & jabatan baru', 'Promotion & new role']
+};
+const EV_JENIS = [['Event flagship', 'Flagship event', '🌟', '#FFF4D6', '#C98A00'], ['Konsinyering', 'Retreat', '🏕️', '#DDF4EA', '#1F9E7C'], ['Program budaya', 'Culture program', '🎨', '#EEEAFE', '#6A5ACD'], ['Lainnya', 'Other', '✨', '#E3EDFC', '#3F6FC2']];
+const evJ = j => EV_JENIS.filter(x => x[0] === j)[0] || EV_JENIS[3];
+async function loadFeed() { const r = await api({ action: 'ark_feed' }); S.feed = r; return r; }
+function evTanggal(e) {
+  const a = e.mulai, b = e.sampai || e.mulai;
+  const tg = a === b ? fmtD(a, true) : a.slice(0, 7) === b.slice(0, 7) ? (+a.slice(8)) + '–' + fmtD(b, true) : fmtD(a) + ' – ' + fmtD(b, true);
+  return tg + (e.jamMulai ? ' · ' + e.jamMulai.replace(':', '.') + (e.jamSelesai ? '–' + e.jamSelesai.replace(':', '.') : '') : '');
+}
+function evHari(e) { const d = dparse(e.mulai); return Math.round((d - dparse(todayISO())) / 864e5); }
+function icsEvent(e) {
+  const d = s => s.replace(/-/g, '');
+  const esc = s => String(s || '').replace(/[\\,;]/g, m => '\\' + m).replace(/\n/g, '\\n');
+  const end = new Date(dparse(e.sampai || e.mulai).getTime() + 864e5);
+  const endS = end.getFullYear() + pad(end.getMonth() + 1) + pad(end.getDate());
+  const start = e.jamMulai ? 'DTSTART;TZID=Asia/Jakarta:' + d(e.mulai) + 'T' + e.jamMulai.replace(':', '') + '00' : 'DTSTART;VALUE=DATE:' + d(e.mulai);
+  const fin = e.jamMulai ? 'DTEND;TZID=Asia/Jakarta:' + d(e.sampai || e.mulai) + 'T' + (e.jamSelesai || e.jamMulai).replace(':', '') + '00' : 'DTEND;VALUE=DATE:' + endS;
+  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//LMSt ARK//Kalender Event//ID', 'BEGIN:VEVENT', 'UID:' + e.id + '@lmst-ark', 'DTSTAMP:' + new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z', start, fin,
+    'SUMMARY:' + esc(e.nama), e.lokasi ? 'LOCATION:' + esc(e.lokasi) : '', 'DESCRIPTION:' + esc([e.jenis, e.ket].filter(Boolean).join(' · ')), 'END:VEVENT', 'END:VCALENDAR'].filter(Boolean).join('\r\n');
+  const a = el('a', { href: URL.createObjectURL(new Blob([ics], { type: 'text/calendar' })), download: (e.nama || 'event').replace(/[^\w\- ]+/g, '').slice(0, 40) + '.ics' });
+  document.body.append(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+}
+function evDateBox(e) {
+  const j = evJ(e.jenis), a = e.mulai, b = e.sampai || a;
+  const top = a === b ? String(+a.slice(8)) : a.slice(0, 7) === b.slice(0, 7) ? (+a.slice(8)) + '–' + (+b.slice(8)) : String(+a.slice(8));
+  return el('span', { style: `width:56px;min-height:58px;border-radius:15px;background:${j[3]};display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none` },
+    el('span', { class: 'fr', style: 'font-size:' + (top.length > 3 ? 16 : 21) + 'px;line-height:1.05' }, top), el('span', { style: 'font-size:10.5px;font-weight:800;color:var(--muted2)' }, BULAN[LANG][+a.slice(5, 7) - 1].toUpperCase()));
+}
+function evItem(e, onclick) {
+  const j = evJ(e.jenis), h = evHari(e);
+  const when = h === 0 ? L('Hari ini', 'Today') : h === 1 ? L('Besok', 'Tomorrow') : h > 1 && h <= 60 ? h + L(' hari lagi', ' days to go') : '';
+  return el('div', { class: 'item', style: 'align-items:center;cursor:default' }, evDateBox(e),
+    el('button', { style: 'all:unset;cursor:pointer;flex:1;min-width:0;display:flex;flex-direction:column;gap:2px', onclick: onclick || (() => evSheet(e)) },
+      el('b', { style: 'font-size:14.5px;line-height:1.3' }, e.nama),
+      el('span', { class: 'hint', style: 'font-size:12.5px' }, j[2] + ' ' + L(j[0], j[1]) + (e.lokasi ? ' · 📍 ' + e.lokasi : '')),
+      when ? el('span', { style: 'align-self:flex-start;font-size:11px;font-weight:800;color:var(--butter-d);background:var(--butter);border-radius:99px;padding:2px 8px;margin-top:2px' }, '⏳ ' + when) : null),
+    el('button', { class: 'iconbtn', 'aria-label': L('Tambahkan ke kalender HP: ', 'Add to phone calendar: ') + e.nama, style: 'background:var(--pri-l);border-color:var(--pri-l);font-size:18px', onclick: () => icsEvent(e) }, '📲'));
+}
+function evSheet(e) {
+  const j = evJ(e.jenis);
+  openSheet(close => [
+    el('div', { class: 'row', style: 'gap:12px' }, evDateBox(e), el('div', { class: 'grow stack', style: 'gap:2px' }, el('span', { class: 'fr', style: 'font-size:19px;line-height:1.2' }, e.nama), el('span', { class: 'hint' }, j[2] + ' ' + L(j[0], j[1])))),
+    el('div', { style: 'display:flex;flex-direction:column' }, kv('📅 ' + L('Waktu', 'When'), evTanggal(e)), e.lokasi ? kv('📍 ' + L('Lokasi', 'Venue'), e.lokasi) : null, e.satker ? kv('🏛️ ' + L('Penyelenggara', 'Host'), e.satker) : null),
+    e.ket ? el('div', { class: 'note blue', style: 'white-space:pre-line' }, e.ket) : null,
+    el('button', { class: 'btn', onclick: () => icsEvent(e) }, '📲 ' + L('Tambahkan ke kalender HP', 'Add to phone calendar')),
+    el('button', { class: 'btn line', onclick: close }, L('Tutup', 'Close'))]);
+}
+function kabarCard(k, refill) {
+  const st = KABAR_ST[k.jenis] || KABAR_ST['Penghargaan'];
+  const self = k.nama === S.me.nama;
+  const b = el('button', { class: 'btn sm', style: `width:100%;min-height:44px;border-radius:99px;background:#fff;color:var(--ink);border:1px solid ${self || k.sudah ? 'transparent' : 'var(--line)'}`, 'aria-pressed': k.sudah ? 'true' : null,
+    onclick: () => {
+      if (self) { openSheet(close => [el('h2', { class: 'h2' }, '🎉 ' + L('Ucapan untukmu', 'Wishes for you')), (k.dari || []).length ? el('div', { class: 'stack', style: 'gap:6px' }, k.dari.map(n => el('span', { style: 'font-size:14.5px;font-weight:700' }, '👏 ' + n))) : el('span', { class: 'hint' }, L('Belum ada ucapan. Nanti muncul di sini.', 'No wishes yet. They will show here.')), el('button', { class: 'btn line', onclick: close }, L('Tutup', 'Close'))]); return; }
+      if (k.sudah) return;
+      busy(b, async () => { await api({ action: 'kabar_ucap', id: k.id }).then(r => { S.feed = r; }); toast(L('Ucapanmu terkirim 💙', 'Wish sent 💙')); refill(); });
+    } }, self ? '🎉 ' + k.n + L(' ucapan untukmu', ' wishes for you') : k.sudah ? '💙 ' + L('Sudah kamu ucapkan', 'You sent wishes') + ' · ' + k.n : '👏 ' + L('Beri ucapan', 'Send wishes') + (k.n ? ' · ' + k.n : ''));
+  return el('div', { style: `width:236px;box-sizing:border-box;border-radius:20px;padding:14px;background:${st[1]};display:flex;flex-direction:column;gap:5px` },
+    el('span', { style: `font-size:12px;font-weight:800;color:${st[2]}` }, st[0] + ' ' + L(st[3], st[4])),
+    el('span', { class: 'fr', style: 'font-size:17px;line-height:1.2' }, k.nama),
+    el('span', { style: 'font-size:12.5px;color:var(--muted2);line-height:1.35' }, [k.ket, k.satker].filter(Boolean).join(' · ') || 'ARK Squad'),
+    el('div', { style: 'margin-top:4px' }, b));
+}
+function feedSections(box) {
+  const draw = () => {
+    const f = S.feed;
+    if (!f) { box.replaceChildren(); return; }
+    const kab = f.kabar || [];
+    const up = (f.event || []).filter(e => (e.sampai || e.mulai) >= todayISO()).slice(0, 2);
+    box.replaceChildren(...nn(
+      kab.length ? el('div', { class: 'stack', style: 'gap:8px' }, el('span', { class: 'sec' }, '🎉 ' + L('Kabar baik', 'Good news')),
+        el('div', { class: 'carousel' }, kab.map(k => kabarCard(k, draw))),
+        el('span', { class: 'small' }, '🔒 ' + L('Hanya tampil untuk pegawai yang setuju · atur di menu Saya', 'Shown only for staff who agreed · set it in Me'))) : null,
+      el('div', { class: 'stack', style: 'gap:8px' },
+        el('div', { class: 'between' }, el('span', { class: 'sec' }, '🎪 ' + L('Event ARK terdekat', 'Upcoming ARK events')), el('button', { class: 'btn soft sm', onclick: () => go('kalender') }, '📅 ' + L('Kalender', 'Calendar'))),
+        up.length ? up.map(e => evItem(e)) : el('button', { class: 'card', style: 'padding:14px;text-align:left;cursor:pointer;font-family:inherit;color:var(--ink)', onclick: () => go('kalender') }, el('span', { class: 'hint' }, L('Belum ada event terjadwal. Buka kalender ›', 'No upcoming events yet. Open calendar ›'))))));
+  };
+  draw();
+  loadFeed().then(() => { if (box.isConnected) draw(); }).catch(() => {});
+}
+
+function kalenderScreen() {
+  const ym = S.p.ym || todayISO().slice(0, 7);
+  const fj = S.p.j || '';
+  const box = el('div', { class: 'stack', style: 'gap:14px' }, loadingBox());
+  const fill = () => {
+    const all = ((S.feed && S.feed.event) || []).filter(e => !fj || e.jenis === fj);
+    const [y, m] = ym.split('-').map(Number);
+    const first = new Date(y, m - 1, 1), days = new Date(y, m, 0).getDate(), lead = (first.getDay() + 6) % 7;
+    const iso = dd => y + '-' + pad(m) + '-' + pad(dd);
+    const on = dd => all.filter(e => e.mulai <= iso(dd) && iso(dd) <= (e.sampai || e.mulai));
+    const sel = S.p.d && S.p.d.slice(0, 7) === ym ? S.p.d : '';
+    const shift = n => { const d = new Date(y, m - 1 + n, 1); go('kalender', { ym: d.getFullYear() + '-' + pad(d.getMonth() + 1), j: fj }, true); };
+    const cells = [];
+    for (let i = 0; i < lead; i++) cells.push(el('span'));
+    for (let dd = 1; dd <= days; dd++) {
+      const ev = on(dd), isSel = sel === iso(dd), isToday = iso(dd) === todayISO(), wk = (lead + dd - 1) % 7 >= 5;
+      cells.push(el('button', { 'aria-label': dd + ' ' + BULAN_PANJANG[LANG][m - 1] + (ev.length ? ', ' + ev.map(e => e.nama).join(', ') : ''), 'aria-pressed': isSel ? 'true' : 'false',
+        onclick: () => go('kalender', { ym, j: fj, d: isSel ? '' : iso(dd) }, true),
+        style: `min-height:46px;border:${isToday && !isSel ? '1.5px solid var(--pri)' : '0'};border-radius:13px;background:${isSel ? 'var(--pri)' : ev.length ? '#F2F7FE' : 'transparent'};color:${isSel ? '#fff' : wk ? 'var(--muted)' : 'var(--ink)'};font-weight:${ev.length || isToday ? 800 : 600};font-size:14px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-family:inherit;padding:0` },
+        el('span', {}, dd), el('span', { style: 'display:flex;gap:2px;height:6px' }, ev.slice(0, 3).map(e => el('i', { style: `width:6px;height:6px;border-radius:9px;background:${isSel ? '#fff' : evJ(e.jenis)[4]}` })))));
+    }
+    const list = sel ? all.filter(e => e.mulai <= sel && sel <= (e.sampai || e.mulai)) : all.filter(e => e.mulai.slice(0, 7) <= ym && (e.sampai || e.mulai).slice(0, 7) >= ym);
+    box.replaceChildren(...nn(
+      el('div', { class: 'card', style: 'padding:10px 10px 12px;gap:6px' },
+        el('div', { class: 'between' }, el('button', { class: 'iconbtn', 'aria-label': L('Bulan sebelumnya', 'Previous month'), onclick: () => shift(-1) }, lic('back')),
+          el('h2', { class: 'fr', style: 'font-size:19px' }, BULAN_PANJANG[LANG][m - 1] + ' ' + y),
+          el('button', { class: 'iconbtn', 'aria-label': L('Bulan berikutnya', 'Next month'), onclick: () => shift(1) }, lic('chev'))),
+        el('div', { style: 'display:grid;grid-template-columns:repeat(7,minmax(0,1fr));text-align:center;font-size:11.5px;font-weight:800;color:var(--muted)' }, (LANG === 'en' ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] : ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']).map(x => el('span', { style: 'padding:4px 0' }, x))),
+        el('div', { style: 'display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px' }, cells),
+        ym !== todayISO().slice(0, 7) ? el('button', { class: 'btn line sm', style: 'align-self:center', onclick: () => go('kalender', { j: fj }, true) }, L('Kembali ke bulan ini', 'Back to this month')) : null),
+      el('div', { class: 'between' }, el('span', { class: 'sec' }, sel ? '📅 ' + fmtD(sel, true) : '🎪 ' + L('Event ', 'Events in ') + BULAN_PANJANG[LANG][m - 1]), el('span', { class: 'small' }, list.length + ' event')),
+      list.length ? el('div', { class: 'list' }, list.map(e => evItem(e))) : el('div', { class: 'empty' }, '🗓️', sel ? L('Tidak ada event di tanggal ini.', 'No events on this day.') : L('Belum ada event bulan ini.', 'No events this month yet.')),
+      el('span', { class: 'hint', style: 'text-align:center' }, L('Kalender ini khusus event ARK, bukan jadwal rapat. Diisi oleh tim LMSt ARK.', 'ARK events only, not meetings. Maintained by the LMSt ARK team.'))));
+  };
+  if (S.feed) fill();
+  loadFeed().then(() => { if (S.screen === 'kalender') fill(); }).catch(e => toast(e.message, true));
+  return shell([
+    el('div', { class: 'top' }, backBtn(), el('div', { class: 'grow stack', style: 'gap:0' }, el('h1', { class: 'h1', style: 'font-size:23px' }, L('Kalender Event ARK', 'ARK Event Calendar') + ' 🎪'), el('span', { class: 'hint' }, L('Event, konsinyering, dan program budaya', 'Events, retreats and culture programs')))),
+    el('div', { class: 'tabs', role: 'group', 'aria-label': L('Jenis event', 'Event type') }, [['', L('Semua', 'All'), '']].concat(EV_JENIS.map(j => [j[0], L(j[0], j[1]), j[2]])).map(([k, t, e]) => el('button', { class: 'tab' + (fj === k ? ' on' : ''), 'aria-pressed': fj === k ? 'true' : 'false', onclick: () => go('kalender', { ym, j: k }, true) }, (e ? e + ' ' : '') + t))),
+    box
+  ], 'ark');
+}
+
+/* izin Kabar baik (menu Saya) */
+function izinScreen() {
+  const box = el('div', { class: 'stack', style: 'gap:14px' }, loadingBox());
+  const Z = S.p.Z;
+  const fill = () => {
+    const sw = (k, icon, bg, t, s) => el('label', { class: 'item', style: 'align-items:center;cursor:pointer' }, ic(icon, bg, 'sm'),
+      el('div', { class: 'grow stack', style: 'gap:1px' }, el('b', { style: 'font-size:14.5px' }, t), el('span', { class: 'hint' }, s)),
+      el('input', { type: 'checkbox', role: 'switch', checked: Z[k], 'aria-label': t, style: 'width:24px;height:24px;accent-color:#3F6FC2;flex:none', onchange: e => { Z[k] = e.target.checked; fill(); } }));
+    const tg = Z.tgl ? Z.tgl.split('-') : ['', ''];
+    const selT = el('select', { class: 'in', id: 'utgl', onchange: e => { Z.tgl = e.target.value + '-' + (Z.tgl.split('-')[1] || ''); } }, el('option', { value: '' }, L('Tanggal', 'Day')), Array.from({ length: 31 }, (_, i) => el('option', { value: pad(i + 1), selected: tg[0] === pad(i + 1) }, i + 1)));
+    const selB = el('select', { class: 'in', id: 'ubln', onchange: e => { Z.tgl = (Z.tgl.split('-')[0] || '') + '-' + e.target.value; } }, el('option', { value: '' }, L('Bulan', 'Month')), BULAN_PANJANG[LANG].map((b, i) => el('option', { value: pad(i + 1), selected: tg[1] === pad(i + 1) }, b)));
+    const save = el('button', { class: 'btn', onclick: () => busy(save, async () => {
+      const r = await api({ action: 'izin_simpan', ultah: Z.ultah, tgl: Z.ultah ? Z.tgl : '', penghargaan: Z.penghargaan, promosi: Z.promosi });
+      S.p.Z = Object.assign({}, r.izin); S.feed = null; toast(L('Pengaturan tersimpan', 'Settings saved')); history.back();
+    }) }, L('Simpan', 'Save'));
+    box.replaceChildren(
+      el('div', { class: 'list' },
+        sw('ultah', 'cake', '#FFE6D9', L('Ucapan ulang tahun', 'Birthday wishes'), L('Tampil di Info ARK pada hari-H saja. Hanya tanggal dan bulan, tanpa tahun.', 'Shown in ARK Info on the day only. Day and month, no year.')),
+        Z.ultah ? el('div', { class: 'grid2', style: 'padding:0 4px' }, el('div', { class: 'field' }, el('label', { class: 'lbl', for: 'utgl' }, L('Tanggal', 'Day')), selT), el('div', { class: 'field' }, el('label', { class: 'lbl', for: 'ubln' }, L('Bulan', 'Month')), selB)) : null,
+        sw('penghargaan', 'medal', '#DDF4EA', L('Penghargaan & prestasi', 'Awards & achievements'), L('Ditulis tim LMSt ARK, baru tampil kalau ini aktif.', 'Posted by LMSt ARK, shown only if this is on.')),
+        sw('promosi', 'glow', '#EEEAFE', L('Promosi & jabatan baru', 'Promotion & new role'), L('Ditulis tim LMSt ARK, baru tampil kalau ini aktif.', 'Posted by LMSt ARK, shown only if this is on.'))),
+      el('div', { class: 'note blue' }, '💡', el('span', {}, L('Semuanya mati sampai kamu sendiri menyalakannya, dan bisa dimatikan kapan saja. Pegawai lain hanya melihat nama, satker, dan kabarnya.', 'Everything stays off until you turn it on, and you can turn it off anytime. Others only see your name, unit and the news.'))),
+      save);
+  };
+  if (Z) fill();
+  else api({ action: 'izin_get' }).then(r => { S.p.Z = Object.assign({}, r.izin); if (S.screen === 'izin') render(); }).catch(e => toast(e.message, true));
+  return shell([el('div', { class: 'top' }, backBtn()), el('h1', { class: 'h1', style: 'font-size:24px' }, L('Kabar baik', 'Good news') + ' 🎉'),
+    el('p', { class: 'hint', style: 'margin:-6px 0 0;font-size:13.5px' }, L('Kamu yang menentukan apa yang boleh tampil di Info ARK.', 'You decide what may appear in ARK Info.')), box], 'saya');
+}
+
+/* Kelola Kabar & Event (tim LMSt ARK) */
+function kelolaArkScreen() {
+  const tab = S.p.tab || 'event';
+  const box = el('div', { class: 'stack', style: 'gap:14px' }, loadingBox());
+  const sats = ['Bidang ARK', 'DPAI', 'DRPK', 'DPIK', 'LMSt ARK'];
+  const fill = () => {
+    const K = S.kelola; if (!K) return;
+    const today = todayISO();
+    const inp = (F, k, type, lb, extra) => { const id = 'ka_' + k; return el('div', { class: 'field' }, el('label', { class: 'lbl', for: id }, lb), el(type === 'long' ? 'textarea' : 'input', Object.assign({ id, class: 'in', type: type === 'long' ? null : type, rows: type === 'long' ? 3 : null, value: F[k] || '', oninput: e => { F[k] = e.target.value; }, onchange: e => { F[k] = e.target.value; } }, extra || {}))); };
+    const act = (label, color, fn) => el('button', { style: `border:0;background:none;color:${color};font-weight:800;font-size:12.5px;cursor:pointer;padding:6px 0;min-height:32px`, onclick: fn }, label);
+    if (tab === 'event') {
+      const F = S.p.F || (S.p.F = { id: '', jenis: 'Event flagship', nama: '', mulai: today, sampai: today, jamMulai: '', jamSelesai: '', lokasi: '', satker: 'Bidang ARK', ket: '', tiket: '' });
+      const save = el('button', { class: 'btn', onclick: () => busy(save, async () => { S.kelola = await api(Object.assign({ action: 'event_save' }, F, { judul: F.nama })); S.feed = null; S.p.F = null; toast(L('Event tersimpan di kalender', 'Event saved')); go('kelolaark', { tab }, true); }) }, F.id ? L('Simpan perubahan', 'Save changes') : '📅 ' + L('Masukkan ke kalender', 'Add to calendar'));
+      const list = K.event.slice().reverse();
+      box.replaceChildren(
+        el('div', { class: 'card', style: 'gap:14px' },
+          el('span', { class: 'fr', style: 'font-size:18px' }, F.id ? L('Ubah event', 'Edit event') : L('Event baru', 'New event')),
+          F.tiket ? el('div', { class: 'note blue', style: 'font-size:12.5px' }, '🎫', el('span', {}, L('Diisi dari tiket ', 'Prefilled from ticket ') + F.tiket + L('. Periksa lagi sebelum disimpan.', '. Check before saving.'))) : null,
+          el('div', { class: 'field' }, el('span', { class: 'lbl', id: 'kej' }, L('Jenis event', 'Event type')), el('div', { class: 'chips', role: 'group', 'aria-labelledby': 'kej', style: 'grid-template-columns:repeat(2,minmax(0,1fr))' },
+            EV_JENIS.map(j => el('button', { class: 'chipbtn' + (F.jenis === j[0] ? ' on' : ''), 'aria-pressed': F.jenis === j[0] ? 'true' : 'false', onclick: () => { F.jenis = j[0]; fill(); } }, j[2] + ' ' + L(j[0], j[1]))))),
+          inp(F, 'nama', 'text', L('Nama kegiatan', 'Event name'), { maxlength: '120', placeholder: L('Misalnya Hakordia 2026', 'E.g. Anti-Corruption Day 2026') }),
+          el('div', { class: 'grid2' }, inp(F, 'mulai', 'date', L('Dari tanggal', 'From')), inp(F, 'sampai', 'date', L('Sampai tanggal', 'Until'))),
+          el('div', { class: 'grid2' }, inp(F, 'jamMulai', 'time', L('Jam mulai (opsional)', 'Start (optional)')), inp(F, 'jamSelesai', 'time', L('Jam selesai (opsional)', 'End (optional)'))),
+          inp(F, 'lokasi', 'text', L('Lokasi', 'Venue'), { maxlength: '150' }),
+          el('div', { class: 'field' }, el('label', { class: 'lbl', for: 'ka_sat' }, L('Penyelenggara', 'Host')), el('select', { class: 'in', id: 'ka_sat', onchange: e => { F.satker = e.target.value; } }, sats.map(s => el('option', { value: s, selected: F.satker === s }, s)))),
+          inp(F, 'ket', 'long', L('Keterangan untuk pegawai (opsional)', 'Notes for staff (optional)'), { maxlength: '500', placeholder: L('Misalnya dress code, cara daftar', 'E.g. dress code, how to join') }),
+          save, F.id || F.tiket ? el('button', { class: 'btn line', onclick: () => { S.p.F = null; go('kelolaark', { tab }, true); } }, L('Batal', 'Cancel')) : null),
+        el('div', { class: 'card', style: 'gap:4px' }, el('span', { class: 'sec' }, L('Event di kalender', 'Calendar events') + ' (' + list.length + ')'),
+          list.length ? list.slice(0, 40).map((e, n) => el('div', { style: 'display:flex;gap:12px;align-items:center;padding:10px 0;' + (n ? 'border-top:1px solid var(--line)' : '') }, evDateBox(e),
+            el('div', { class: 'grow stack', style: 'gap:1px' }, el('b', { style: 'font-size:14px' }, e.nama), el('span', { class: 'hint' }, evJ(e.jenis)[2] + ' ' + evTanggal(e) + ((e.sampai || e.mulai) < today ? L(' · selesai', ' · past') : ''))),
+            el('div', { class: 'stack', style: 'gap:0;align-items:flex-end' }, act(L('Ubah', 'Edit'), 'var(--pri)', () => { S.p.F = Object.assign({}, e); go('kelolaark', { tab, F: S.p.F }, true); }),
+              act(L('Hapus', 'Delete'), 'var(--rose-d)', () => busy(null, async () => { S.kelola = await api({ action: 'event_hapus', id: e.id }); S.feed = null; toast(L('Event dihapus', 'Event removed')); fill(); }))))) : el('span', { class: 'hint', style: 'padding:8px 0' }, L('Belum ada event.', 'No events yet.'))));
+    } else {
+      const F = S.p.K || (S.p.K = { id: '', jenis: 'Penghargaan', nama: '', ket: '', mulai: today, sampai: isoPlus(6) });
+      const sugg = el('div', { class: 'sugg', hidden: true });
+      let tmr;
+      const nameIn = el('input', { id: 'ka_nama', class: 'in', type: 'search', autocomplete: 'off', value: F.nama, placeholder: L('Ketik nama pegawai', 'Type a name'), oninput: () => {
+        F.nama = ''; clearTimeout(tmr); const q = nameIn.value.trim(); if (q.length < 2) { sugg.hidden = true; return; }
+        tmr = setTimeout(async () => { try { const r = await api({ action: 'cari', q }, false); sugg.replaceChildren(...r.hasil.map(h => el('button', { type: 'button', onclick: () => { F.nama = h.nama; nameIn.value = h.nama; sugg.hidden = true; } }, h.nama, el('span', { class: 'small' }, h.satker)))); sugg.hidden = !r.hasil.length; } catch (e) { toast(e.message, true); } }, 250);
+      } });
+      const save = el('button', { class: 'btn', onclick: () => busy(save, async () => { if (!F.nama) throw new Error(L('Pilih nama dari daftar', 'Pick a name from the list')); S.kelola = await api(Object.assign({ action: 'kabar_save' }, F, { pegawai: F.nama })); S.feed = null; S.p.K = null; toast(L('Kabar tersimpan', 'Saved')); go('kelolaark', { tab }, true); }) }, F.id ? L('Simpan perubahan', 'Save changes') : '🎉 ' + L('Simpan kabar', 'Save news'));
+      const stOf = k => !k.izin ? [L('Menunggu izin pegawai', 'Awaiting consent'), '#FFF4D6', '#6B4E00'] : k.sampai < today ? [L('Selesai', 'Ended'), '#EEF1F5', '#52657F'] : k.mulai > today ? [L('Terjadwal', 'Scheduled'), '#E3EDFC', '#2B4F94'] : [L('Tayang', 'Live'), '#DDF4EA', '#1F6E55'];
+      box.replaceChildren(
+        el('div', { class: 'note blue', style: 'font-size:12.5px' }, '🎂', el('span', {}, L('Ulang tahun tidak perlu diisi di sini: tampil otomatis untuk pegawai yang mengaktifkannya sendiri di menu Saya.', 'Birthdays need no entry: they show automatically for staff who turn them on in Me.'))),
+        el('div', { class: 'card', style: 'gap:14px' },
+          el('span', { class: 'fr', style: 'font-size:18px' }, F.id ? L('Ubah kabar', 'Edit news') : L('Kabar baik baru', 'New good news')),
+          el('div', { class: 'field' }, el('span', { class: 'lbl', id: 'kbj' }, L('Jenis', 'Type')), el('div', { class: 'chips', role: 'group', 'aria-labelledby': 'kbj', style: 'grid-template-columns:repeat(2,minmax(0,1fr))' },
+            ['Penghargaan', 'Promosi'].map(j => el('button', { class: 'chipbtn' + (F.jenis === j ? ' on' : ''), 'aria-pressed': F.jenis === j ? 'true' : 'false', onclick: () => { F.jenis = j; fill(); } }, KABAR_ST[j][0] + ' ' + L(j === 'Promosi' ? 'Promosi & jabatan' : j, KABAR_ST[j][4]))))),
+          el('div', { class: 'field' }, el('label', { class: 'lbl', for: 'ka_nama' }, L('Nama pegawai', 'Employee')), nameIn, sugg),
+          inp(F, 'ket', 'text', F.jenis === 'Promosi' ? L('Jabatan baru', 'New role') : L('Nama penghargaan', 'Award'), { maxlength: '150', placeholder: F.jenis === 'Promosi' ? L('Misalnya Deputi Direktur DPAI', 'E.g. Deputy Director') : L('Misalnya Juara 1 Lomba Inovasi OJK', 'E.g. 1st place, OJK Innovation Award') }),
+          el('div', { class: 'grid2' }, inp(F, 'mulai', 'date', L('Tampil mulai', 'Show from')), inp(F, 'sampai', 'date', L('Sampai', 'Until'))),
+          el('span', { class: 'hint' }, '🔒 ' + L('Kabar hanya tampil kalau pegawai itu mengizinkan jenis kabar ini di menu Saya.', 'Shown only if that employee allows this type in Me.')),
+          save, F.id ? el('button', { class: 'btn line', onclick: () => { S.p.K = null; go('kelolaark', { tab }, true); } }, L('Batal', 'Cancel')) : null),
+        el('div', { class: 'card', style: 'gap:4px' }, el('span', { class: 'sec' }, L('Kabar yang ada', 'Current news')),
+          K.kabar.length ? K.kabar.slice(0, 30).map((k, n) => { const s = stOf(k); return el('div', { style: 'display:flex;gap:12px;align-items:center;padding:10px 0;' + (n ? 'border-top:1px solid var(--line)' : '') },
+            el('span', { style: `width:40px;height:40px;border-radius:13px;background:${KABAR_ST[k.jenis][1]};display:flex;align-items:center;justify-content:center;font-size:20px;flex:none` }, KABAR_ST[k.jenis][0]),
+            el('div', { class: 'grow stack', style: 'gap:2px' }, el('b', { style: 'font-size:14px' }, k.nama), el('span', { class: 'hint' }, k.ket + ' · ' + fmtD(k.mulai) + ' – ' + fmtD(k.sampai, true)), el('span', { style: 'align-self:flex-start' }, pill(s[0], s[1], s[2]))),
+            el('div', { class: 'stack', style: 'gap:0;align-items:flex-end' }, act(L('Ubah', 'Edit'), 'var(--pri)', () => { S.p.K = Object.assign({}, k); go('kelolaark', { tab, K: S.p.K }, true); }),
+              act(L('Hapus', 'Delete'), 'var(--rose-d)', () => busy(null, async () => { S.kelola = await api({ action: 'kabar_hapus', id: k.id }); S.feed = null; toast(L('Kabar dihapus', 'Removed')); fill(); })))); }) : el('span', { class: 'hint', style: 'padding:8px 0' }, L('Belum ada kabar.', 'No news yet.'))));
+    }
+  };
+  if (S.kelola) fill(); else box.replaceChildren(loadingBox());
+  api({ action: 'ark_kelola' }).then(r => { S.kelola = r; if (S.screen === 'kelolaark') fill(); }).catch(e => toast(e.message, true));
+  return shell([
+    el('div', { class: 'top' }, backBtn(), pill(L('Khusus tim LMSt ARK', 'LMSt ARK team only'), '#EEEAFE', '#4B3DB0')),
+    el('h1', { class: 'h1', style: 'font-size:24px' }, L('Kelola Kabar & Event', 'Manage News & Events') + ' 🎉'),
+    el('div', { class: 'tabs', role: 'group' }, [['event', '🎪 ' + L('Kalender Event', 'Event calendar')], ['kabar', '🎉 ' + L('Kabar baik', 'Good news')]].map(([k, t]) => el('button', { class: 'tab' + (tab === k ? ' on' : ''), 'aria-pressed': tab === k ? 'true' : 'false', onclick: () => go('kelolaark', { tab: k }, true) }, t))),
+    box
+  ], 'tim');
+}
+function eventDariTiket(t) {
+  const d = t.data || {};
+  const j = ['Event flagship', 'Konsinyering', 'Program budaya'].indexOf(d.jenis) >= 0 ? d.jenis : 'Lainnya';
+  go('kelolaark', { tab: 'event', F: { id: '', jenis: j, nama: d.kegiatan || '', mulai: d.dari || todayISO(), sampai: d.sampai || d.dari || todayISO(), jamMulai: d.mulai || '', jamSelesai: d.selesai || '', lokasi: d.lokasi || '', satker: ['DPAI', 'DRPK', 'DPIK', 'LMSt ARK'].indexOf(t.untuk) >= 0 ? t.untuk : 'Bidang ARK', ket: '', tiket: t.no } });
+}
+
 /* ============ RENDER ============ */
 const SCREENS = {
   login: loginScreen, buatkode: buatKodeScreen, beranda: berandaScreen, layanan: layananScreen, form: formScreen, sukses: suksesScreen,
   mine: mineScreen, mdetail: mdetailScreen, ark: infoArkScreen, saran: saranScreen, konsulsat: konsulSatScreen, sarantim: saranTimScreen, struktur: strukturScreen, itkat: itKatScreen, ittopik: itTopikScreen, saya: sayaScreen, privasi: privasiScreen,
-  papan: papanScreen, daftar: daftarScreen, tdetail: tdetailScreen, dispo: dispoScreen, kelolainfo: kelolaInfoScreen, resetkode: resetKodeScreen, rekap: rekapScreen
+  papan: papanScreen, daftar: daftarScreen, tdetail: tdetailScreen, dispo: dispoScreen, kelolainfo: kelolaInfoScreen, resetkode: resetKodeScreen, rekap: rekapScreen, kalender: kalenderScreen, izin: izinScreen, kelolaark: kelolaArkScreen
 };
-const TEAM_ONLY = ['papan', 'daftar', 'tdetail', 'dispo', 'kelolainfo', 'resetkode', 'rekap'];
+const TEAM_ONLY = ['papan', 'daftar', 'tdetail', 'dispo', 'kelolainfo', 'resetkode', 'rekap', 'kelolaark'];
 function render() {
   let s = S.screen;
   if (!S.nama && !['login', 'buatkode'].includes(s)) s = S.screen = 'login';

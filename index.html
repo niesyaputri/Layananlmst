@@ -220,8 +220,8 @@ IC.arkc = '<rect x="3" y="19" width="18" height="2.5" rx="1.2" fill="#F6B98E"/><
 
 /* ============ PENGATURAN ============
    Tempel URL Web app Google Apps Script di antara tanda kutip (lihat panduan). Harus diawali https:// */
-const API_URL = 'https://script.google.com/macros/s/AKfycbxfCXWDbbzCnmwQvurpdBvNLssmtFfqdiAt9me-n2rZ6CQHkBXsc_3oEmabPEgAMHH7dw/exec';
-const VERSI = '3.3.0';
+const API_URL = '';
+const VERSI = '3.4.0';
 
 /* ============ BAHASA ============ */
 let LANG = (() => { try { return localStorage.getItem('lmst_lang') || 'id'; } catch (e) { return 'id'; } })();
@@ -239,16 +239,16 @@ const STATUS = {
   'Tidak bisa diproses': ['#FCE4EA', '#8E3049', 'Cannot be processed', '🚫'],
   'Dibatalkan': ['#EEF1F5', '#52657F', 'Cancelled', '❌']
 };
-const LAY_EMO = { ruang: '🏢', hotel: '🏨', tiket: '✈️', konsumsi: '🍔', update: '🪪', kebutuhan: '☕', aset: '💻', pinjam: '📦', arsip: '📁', locker: '🔐', aksesdata: '🗂️', akses: '🚪', event: '🎉', lainnya: '💬' };
+const LAY_EMO = { ruang: '🏢', hotel: '🏨', tiket: '✈️', konsumsi: '🍔', update: '🪪', kebutuhan: '☕', jemput: '🚘', konsultasi: '🗓️', jemput: '🚘', konsultasi: '🗓️', aset: '💻', pinjam: '📦', arsip: '📁', locker: '🔐', aksesdata: '🗂️', akses: '🚪', event: '🎉', lainnya: '💬' };
 const FINAL = ['Selesai', 'Tidak bisa diproses', 'Dibatalkan'];
 const SATKER = {
-  'DPAI': ['dpai', '#E0EEFF', 'Pengawasan Audit Internal', 'Internal Audit'],
-  'DRPK': ['drpk', '#EEEAFE', 'Manajemen Risiko & PK', 'Risk Mgmt & Quality Assurance'],
-  'DPIK': ['dpik', '#DDF4EA', 'Penegakan Integritas', 'Integrity Enforcement'],
+  'DPAI': ['dpai', '#E0EEFF', 'Departemen Audit Internal', 'Internal Audit Department'],
+  'DRPK': ['drpk', '#EEEAFE', 'Departemen Manajemen Risiko dan Pengendalian Kualitas', 'Risk Management and Quality Assurance Department'],
+  'DPIK': ['dpik', '#DDF4EA', 'Departemen Penegakan Integritas dan Audit Khusus', 'Integrity Enforcement and Special Audit Department'],
   'LMSt ARK': ['lmst', '#FFE6D9', 'Layanan Manajemen Strategis', 'Strategic Management Services'],
   'Depkom ARK': ['depkom', '#E0EEFF', 'Lintas satker di ARK', 'Across ARK units']
 };
-const LAY_BG = { ruang: '#E0EEFF', hotel: '#EEEAFE', tiket: '#DDF4EA', konsumsi: '#FFE6D9', update: '#FCE4EA', kebutuhan: '#E6F4EA', aset: '#E0EEFF', pinjam: '#FFE6D9', arsip: '#FFF4D6', locker: '#FFE6D9', aksesdata: '#DDF4EA', akses: '#EEEAFE', event: '#FFF4D6', lainnya: '#EEF1F5' };
+const LAY_BG = { ruang: '#E0EEFF', hotel: '#EEEAFE', tiket: '#DDF4EA', konsumsi: '#FFE6D9', update: '#FCE4EA', kebutuhan: '#E6F4EA', jemput: '#E0EEFF', konsultasi: '#E8F2FD', aset: '#E0EEFF', pinjam: '#FFE6D9', arsip: '#FFF4D6', locker: '#FFE6D9', aksesdata: '#DDF4EA', akses: '#EEEAFE', event: '#FFF4D6', lainnya: '#EEF1F5' };
 const AV_BG = ['#C9C0F2', '#FFD0B8', '#A8E3CB', '#B5D4FA', '#F7A9BC', '#FFE29A'];
 
 /* ============ DOM ============ */
@@ -278,7 +278,7 @@ function svg(name, size) {
   s.innerHTML = IC[name] || IC.lainnya;
   return s;
 }
-const EMO = { ruang: '🏢', hotel: '🏨', tiket: '✈️', konsumsi: '🍔', data: '🪪', update: '🪪', kebutuhan: '☕', aset: '💻', pinjam: '📦', arsip: '📁', locker: '🔐', aksesdata: '🗂️', akses: '🚪', event: '🎉', lainnya: '💬', dpai: '🔍', drpk: '🛡️', dpik: '⚖️', lmst: '🧭', depkom: '🌐', buat: '📝', mine: '📋', ark: '🏛️', arkc: '🏛️', infoark: '📚', tim: '👥', saya: '✨', info: '📣', cal: '📅', clock: '🕒', pin: '📌', loc: '📍', send: '📤', phone: '📞', warn: '⚠️', ban: '🚫', star: '⭐', check: '✅', gear: '⚙️', new: '🆕', doc: '📄', tool: '🛠️', city: '🏙️', key: '🔑', bulb: '💡', person: '👤', people: '👥', lock: '🔒', eye: '👁️', mobile: '📱', bell: '🔔', target: '🎯', refresh: '🔁', chart: '📊', fire: '🔥', mail: '✉️', plate: '🍽️', suitcase: '🧳', search: '🔍', compass: '🧭', numpad: '🔢', see: '👀', globe: '🌐', shield: '🛡️', scale: '⚖️' };
+const EMO = { ruang: '🏢', hotel: '🏨', tiket: '✈️', konsumsi: '🍔', data: '🪪', update: '🪪', kebutuhan: '☕', jemput: '🚘', konsultasi: '🗓️', aset: '💻', pinjam: '📦', arsip: '📁', locker: '🔐', aksesdata: '🗂️', akses: '🚪', event: '🎉', lainnya: '💬', dpai: '🔍', drpk: '🛡️', dpik: '⚖️', lmst: '🧭', depkom: '🌐', buat: '📝', mine: '📋', ark: '🏛️', arkc: '🏛️', infoark: '📚', tim: '👥', saya: '✨', info: '📣', cal: '📅', clock: '🕒', pin: '📌', loc: '📍', send: '📤', phone: '📞', warn: '⚠️', ban: '🚫', star: '⭐', check: '✅', gear: '⚙️', new: '🆕', doc: '📄', tool: '🛠️', city: '🏙️', key: '🔑', bulb: '💡', person: '👤', people: '👥', lock: '🔒', eye: '👁️', mobile: '📱', bell: '🔔', target: '🎯', refresh: '🔁', chart: '📊', fire: '🔥', mail: '✉️', plate: '🍽️', suitcase: '🧳', search: '🔍', compass: '🧭', numpad: '🔢', see: '👀', globe: '🌐', shield: '🛡️', scale: '⚖️' };
 const emo = name => el('span', { class: 'emo', 'aria-hidden': 'true' }, EMO[name] || '💬');
 function ic(name, bg, cls) { return el('span', { class: 'ic ' + (cls || ''), style: 'background:' + (bg || 'var(--pri-l)') }, EMO[name] ? emo(name) : svg(name)); }
 const LINE_IC = {
@@ -511,6 +511,34 @@ const FORMS = {
     { k: 'keterangan', l: ['Keterangan singkat', 'Short description'], t: 'long', ph: ['Misalnya: lulus S2, sertifikat baru', 'E.g. finished master degree, new certificate'], hint: ['Tanpa nomor identitas atau nomor rekening.', 'No ID or account numbers.'] },
     { t: 'section', l: ['Cara menyampaikan dokumen', 'How to send documents'], ic: 'mail' },
     { k: 'cara', l: ['Pilih cara', 'Choose'], t: 'chips', cols: 1, req: true, opt: O(['Unggah lewat formulir Microsoft', 'Upload via Microsoft form'], ['Serahkan langsung ke LMSt ARK', 'Hand directly to LMSt ARK']) }
+  ],
+  jemput: [
+    { k: 'pimpinan', l: ['Pimpinan yang dijemput', 'Leader to pick up'], t: 'text', req: true, ph: ['Nama dan jabatan, misalnya Bapak X, Kepala Departemen', 'Name and title'] },
+    { k: 'jenis', l: ['Jenis layanan', 'Service type'], t: 'chips', req: true, opt: O(['Jemput', 'Pick-up'], ['Antar', 'Drop-off'], ['Antar-jemput', 'Round trip']) },
+    { t: 'section', l: ['Waktu', 'Timing'], ic: 'cal' },
+    { k: 'tanggal', l: ['Tanggal', 'Date'], t: 'date', req: true },
+    { k: 'jam', l: ['Jam jemput', 'Pick-up time'], t: 'time', req: true },
+    { t: 'section', l: ['Rute', 'Route'], ic: 'loc' },
+    { k: 'titik', l: ['Titik jemput', 'Pick-up point'], t: 'chips', req: true, opt: O(['Bandara Soekarno-Hatta', 'Soekarno-Hatta Airport'], ['Bandara Halim', 'Halim Airport'], ['Stasiun', 'Train station'], ['Hotel', 'Hotel'], ['Kantor', 'Office'], ['Lainnya', 'Other']) },
+    { k: 'titik_detail', l: ['Detail titik jemput', 'Pick-up details'], t: 'text', req: true, ph: ['Terminal, nama stasiun, hotel, atau alamat', 'Terminal, station, hotel or address'] },
+    { k: 'nomor', l: ['Nomor penerbangan / kereta', 'Flight / train number'], t: 'text', req: true, ph: ['Contoh: GA 123, tiba 14.30', 'E.g. GA 123, arrives 14:30'], hint: ['Supaya tim bisa memantau jika ada keterlambatan.', 'So the team can track delays.'], show: v => /Bandara|Stasiun/.test(v.titik || '') },
+    { k: 'tujuan', l: ['Tujuan', 'Destination'], t: 'text', req: true, ph: ['Contoh: Wisma Mulia 2, atau alamat rumah', 'E.g. Wisma Mulia 2, or home address'] },
+    { k: 'penumpang', l: ['Jumlah penumpang', 'Passengers'], t: 'number', req: true },
+    { k: 'bawaan', l: ['Barang bawaan', 'Luggage'], t: 'text', ph: ['Contoh: 2 koper besar', 'E.g. 2 large suitcases'] },
+    { k: 'kontak', l: ['Kontak pendamping / sekretaris', 'Companion / secretary contact'], t: 'text', req: true, ph: ['Nama dan nomor HP', 'Name and phone number'] },
+    { k: 'ket', l: ['Keterangan', 'Notes'], t: 'long' }
+  ],
+  konsultasi: [
+    { k: 'topik', l: ['Topik', 'Topic'], t: 'chips', req: true, opt: O(['💰 Anggaran', '💰 Budget'], ['👥 SDM', '👥 HR'], ['🎉 Event', '🎉 Events'], ['🛒 Pengadaan', '🛒 Procurement'], ['🗄️ Aset dan arsip', '🗄️ Assets & archives'], ['💬 Lainnya', '💬 Other']) },
+    { k: 'topik_lain', l: ['Topik lainnya', 'Other topic'], t: 'text', req: true, show: v => /Lainnya/.test(v.topik || '') },
+    { k: 'agenda', l: ['Yang ingin didiskusikan', 'What to discuss'], t: 'long', req: true, rows: 4, ph: ['Ceritakan singkat konteks dan pertanyaanmu', 'Briefly describe the context and your questions'] },
+    { t: 'section', l: ['Waktu yang diinginkan', 'Preferred time'], ic: 'cal' },
+    { k: 'tanggal', l: ['Tanggal', 'Date'], t: 'date', req: true },
+    { k: 'jam', l: ['Jam', 'Time'], t: 'time', req: true },
+    { k: 'alt', l: ['Tanggal/jam alternatif', 'Alternative date/time'], t: 'text', ph: ['Contoh: Kamis 10.00 atau Jumat pagi', 'E.g. Thursday 10:00 or Friday morning'] },
+    { k: 'format', l: ['Format', 'Format'], t: 'chips', req: true, opt: O(['Tatap muka', 'In person'], ['Online (Teams/Zoom)', 'Online (Teams/Zoom)']) },
+    { k: 'peserta', l: ['Jumlah peserta', 'Participants'], t: 'number', req: true },
+    { k: 'ket', l: ['Keterangan', 'Notes'], t: 'long' }
   ],
   kebutuhan: [
     { k: 'jenis', l: ['Jenis kebutuhan', 'What is needed'], t: 'multi', req: true, opt: O(['☕ Kopi, teh, gula', '☕ Coffee, tea, sugar'], ['🍜 Mi instan & camilan', '🍜 Instant noodles & snacks'], ['🧻 Tisu & tisu basah', '🧻 Tissues & wet wipes'], ['🧴 Sabun & hand sanitizer', '🧴 Soap & hand sanitizer'], ['💧 Air minum / galon', '💧 Drinking water'], ['🍽️ Peralatan makan', '🍽️ Cutlery & dishes'], ['🪑 Kursi / meja tambahan', '🪑 Extra chairs / tables'], ['💬 Lainnya', '💬 Other']), hint: ['Boleh pilih lebih dari satu.', 'You can choose more than one.'] },
@@ -763,30 +791,81 @@ function buatKodeScreen() {
 }
 
 /* ============ BERANDA ============ */
+function satkerGrid(onPick) {
+  const sats = (S.boot.satkerList || Object.keys(SATKER));
+  return el('div', { class: 'grid2' }, sats.map(s => {
+    const st = SATKER[s] || ['lainnya', '#EEF1F5', s, s];
+    return el('button', { class: 'sat', style: s === 'Depkom ARK' ? 'grid-column:1/-1' : '', onclick: () => onPick(s) },
+      ic(st[0], st[1]), el('b', {}, s), el('span', { class: 'hint' }, L(st[2], st[3])));
+  }));
+}
+function konsulSatScreen() {
+  return shell([
+    el('div', { class: 'top' }, backBtn()),
+    el('h1', { class: 'h1', style: 'font-size:24px' }, L('Jadwalkan konsultasi', 'Schedule a consultation') + ' 🗓️'),
+    el('p', { class: 'hint', style: 'margin:-6px 0 0;font-size:13.5px' }, L('Untuk satker mana? Permintaanmu masuk ke tim LMSt ARK yang menangani satker itu.', 'For which unit? Your request goes to the LMSt ARK team for that unit.')),
+    satkerGrid(s => { S.untuk = s; go('form', { kode: 'konsultasi' }); })
+  ], 'buat');
+}
 function berandaScreen() {
   const info = (S.boot && S.boot.info) || [];
   const recent = [];
   (S.mine || []).forEach(t => { if (t.kode && FORMS[t.kode] && !recent.some(x => x.kode === t.kode) && recent.length < 2) recent.push(t); });
-  const sats = (S.boot.satkerList || Object.keys(SATKER));
   return shell([
-    el('div', { class: 'between' }, el('div', { class: 'stack', style: 'gap:0' }, el('span', { class: 'small' }, greet() + ' ☀️'), el('span', { class: 'fr', style: 'font-size:22px' }, L('Halo, ', 'Hi, ') + short(S.me.nama) + ' 👋')), langToggle()),
-    info.length ? el('button', { class: 'card', style: 'flex-direction:row;align-items:center;gap:12px;padding:12px 14px;background:var(--pri);border-color:var(--pri);color:#fff;text-align:left;cursor:pointer;font-family:inherit', onclick: () => go('ark') },
-      el('span', { class: 'emo', style: 'font-size:26px' }, '📣'),
-      el('div', { class: 'grow stack', style: 'gap:1px;min-width:0' }, el('b', { style: 'font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis' }, info[0].judul), el('span', { style: 'font-size:12.5px;opacity:.9' }, info.length > 1 ? L('dan ', 'and ') + (info.length - 1) + L(' pengumuman lain di Info ARK', ' more in ARK Info') : L('Lihat di Info ARK', 'See it in ARK Info'))),
-      el('span', { style: 'font-size:22px;font-weight:800' }, '›')) : null,
-    el('span', { class: 'sec' }, '🏢 ' + L('Untuk satker mana?', 'For which unit?')),
-    el('div', { class: 'grid2' }, sats.map(s => {
-      const st = SATKER[s] || ['lainnya', '#EEF1F5', s, s];
-      return el('button', { class: 'sat', style: s === 'Depkom ARK' ? 'grid-column:1/-1' : '', onclick: () => { S.untuk = s; go('layanan'); } },
-        ic(st[0], st[1]), el('b', {}, s), el('span', { class: 'hint' }, L(st[2], st[3])));
-    })),
+    el('div', { class: 'between' }, el('div', { class: 'stack', style: 'gap:0' }, el('span', { class: 'small' }, greet() + ' ☀️'), el('span', { class: 'fr', style: 'font-size:22px' }, L('Halo, ', 'Hi, ') + short(S.me.nama) + ' 👋'))),
+    el('div', { class: 'stack', style: 'gap:2px' }, el('span', { class: 'fr', style: 'font-size:18px' }, L('Hi, kamu butuh bantuan? 👋', 'Hi, need a hand? 👋')), el('span', { class: 'hint', style: 'font-size:13.5px' }, '🏢 ' + L('Pilih dulu ya untuk satker mana.', 'First, pick which unit it is for.'))),
+    satkerGrid(s => { S.untuk = s; go('layanan'); }),
     recent.length ? el('div', { class: 'stack', style: 'gap:8px' }, el('span', { class: 'sec' }, '🔁 ' + L('Pesan lagi', 'Order again')),
       recent.map(t => el('div', { class: 'card', style: 'flex-direction:row;align-items:center;padding:12px 14px' }, ic(layIcon(t.kode), LAY_BG[t.kode]),
         el('div', { class: 'grow stack', style: 'gap:1px' }, el('b', { style: 'font-size:14px' }, layName(t.kode, t.kategori)), el('span', { class: 'hint' }, fmtD(t.waktu) + ' · ' + t.untuk)),
-        el('button', { class: 'btn soft sm', onclick: () => pesanLagi(t) }, L('Pesan lagi', 'Again'))))) : null
+        el('button', { class: 'btn soft sm', onclick: () => pesanLagi(t) }, L('Pesan lagi', 'Again'))))) : null,
+    el('button', { class: 'card', style: 'flex-direction:row;align-items:center;gap:12px;padding:14px;background:#FFF1E6;border-color:#FBE0CC;text-align:left;cursor:pointer;font-family:inherit;color:var(--ink)', onclick: () => go('saran') },
+      el('span', { class: 'emo', style: 'font-size:28px' }, '💌'),
+      el('div', { class: 'grow stack', style: 'gap:1px' }, el('b', { style: 'font-size:15px' }, L('Saran dan masukan untuk LMSt', 'Feedback for LMSt')), el('span', { class: 'hint', style: 'font-size:12.5px' }, L('Bantu kami melayani ARK Squad lebih baik', 'Help us serve the ARK Squad better'))), lic('chev')),
+    layByKode('konsultasi') ? el('button', { class: 'card', style: 'flex-direction:row;align-items:center;gap:12px;padding:14px;background:#E8F2FD;border-color:#D4E6FA;text-align:left;cursor:pointer;font-family:inherit;color:var(--ink)', onclick: () => go('konsulsat') },
+      el('span', { class: 'emo', style: 'font-size:28px' }, '🗓️'),
+      el('div', { class: 'grow stack', style: 'gap:1px' }, el('b', { style: 'font-size:15px' }, L('Butuh diskusi dan konsultasi dengan LMSt?', 'Need to discuss with LMSt?')), el('span', { class: 'hint', style: 'font-size:12.5px' }, L('Yuk request penjadwalan: anggaran, SDM, event, pengadaan, aset dan arsip', 'Request a session: budget, HR, events, procurement, assets & archives'))), lic('chev')) : null
   ], 'buat');
 }
-const LAY_ORD = ['ruang', 'hotel', 'tiket', 'konsumsi', 'update', 'kebutuhan', 'aset', 'pinjam', 'arsip', 'locker', 'aksesdata', 'akses', 'event', 'lainnya'];
+
+/* ============ SARAN & MASUKAN (pegawai) ============ */
+const SARAN_JENIS = [['Saran', 'Suggestion', '💡'], ['Masukan', 'Feedback', '📝'], ['Apresiasi', 'Appreciation', '💐'], ['Keluhan', 'Complaint', '😕']];
+const saranEmo = j => (SARAN_JENIS.filter(x => x[0] === j)[0] || SARAN_JENIS[0])[2];
+const saranStatus = st => st === 'Ditindaklanjuti' ? pill('✅ ' + L('Ditindaklanjuti', 'Followed up'), '#DDF4EA', '#1F6E55') : st === 'Dibaca' ? pill('👀 ' + L('Sudah dibaca', 'Read'), 'var(--pri-l)', 'var(--pri-d)') : pill('🆕 ' + L('Terkirim', 'Sent'), '#FFF4D6', '#7A5A00');
+function saranScreen() {
+  const F = S.p.F || (S.p.F = { jenis: 'Saran', isi: '' });
+  const hist = el('div', { class: 'stack', style: 'gap:10px' }, loadingBox());
+  const showHist = list => hist.replaceChildren(...nn(list.length ? el('span', { class: 'sec' }, '🕒 ' + L('Saran yang pernah kamu kirim', 'What you have sent')) : null,
+    list.map(x => el('div', { class: 'card', style: 'gap:6px;padding:14px' },
+      el('div', { class: 'between' }, el('b', { style: 'font-size:14px' }, saranEmo(x.jenis) + ' ' + L(x.jenis, (SARAN_JENIS.filter(j => j[0] === x.jenis)[0] || [])[1] || x.jenis)), saranStatus(x.status)),
+      el('span', { style: 'font-size:13.5px;line-height:1.45;white-space:pre-line' }, x.isi),
+      el('span', { class: 'small' }, fmtD(x.waktu)),
+      x.tanggapan ? el('div', { class: 'note blue', style: 'flex-direction:column;align-items:flex-start;gap:2px' }, el('b', { style: 'font-size:12.5px' }, '💬 ' + L('Tanggapan LMSt ARK', 'LMSt ARK reply') + (x.oleh ? ' · ' + short(x.oleh) : '')), el('span', { style: 'white-space:pre-line' }, x.tanggapan)) : null))));
+  api({ action: 'saran_saya' }).then(r => showHist(r.saran || [])).catch(() => hist.replaceChildren());
+  const ta = el('textarea', { class: 'in', id: 'saran_isi', rows: 5, placeholder: L('Ceritakan saran, masukan, atau apresiasimu untuk tim LMSt ARK…', 'Share your suggestion, feedback or appreciation for LMSt ARK…'), oninput: e => { F.isi = e.target.value; } }, F.isi);
+  ta.value = F.isi;
+  const jenisRow = el('div', { class: 'chips', style: 'grid-template-columns:1fr 1fr', role: 'group', 'aria-label': L('Jenis', 'Type') });
+  const fillJ = () => jenisRow.replaceChildren(...SARAN_JENIS.map(j => el('button', { type: 'button', class: 'chipbtn' + (F.jenis === j[0] ? ' on' : ''), 'aria-pressed': F.jenis === j[0] ? 'true' : 'false', onclick: () => { F.jenis = j[0]; fillJ(); } }, j[2] + ' ' + L(j[0], j[1]))));
+  fillJ();
+  const send = el('button', { class: 'btn', onclick: async () => {
+    if ((F.isi || '').trim().length < 5) { toast(L('Tulis dulu saran atau masukanmu ya', 'Please write your feedback first'), true); ta.focus(); return; }
+    send.disabled = true;
+    try { const r = await api({ action: 'saran_kirim', jenis: F.jenis, isi: F.isi }); F.isi = ''; ta.value = ''; showHist(r.saran || []); toast(L('Terima kasih! Saranmu sudah terkirim 💌', 'Thank you! Sent 💌')); }
+    catch (e) { toast(e.message, true); } finally { send.disabled = false; }
+  } }, '💌 ' + L('Kirim', 'Send'));
+  return shell([
+    el('div', { class: 'top' }, backBtn()),
+    el('h1', { class: 'h1', style: 'font-size:24px' }, L('Saran dan masukan', 'Feedback') + ' 💌'),
+    el('p', { class: 'hint', style: 'margin:-6px 0 0;font-size:13.5px' }, L('Untuk tim LMSt ARK. Semua masukan kami baca.', 'For the LMSt ARK team. We read every message.')),
+    el('div', { class: 'card', style: 'gap:12px' },
+      el('div', { class: 'field' }, el('span', { class: 'lbl' }, L('Jenis', 'Type')), jenisRow),
+      el('div', { class: 'field' }, el('label', { class: 'lbl', for: 'saran_isi' }, L('Isi', 'Message')), ta),
+      el('span', { class: 'hint' }, '👤 ' + L('Namamu (', 'Your name (') + S.me.nama + L(') ikut tercatat dan bisa dibaca seluruh tim LMSt ARK.', ') is recorded and visible to the whole LMSt ARK team.')),
+      send),
+    hist
+  ], 'buat');
+}
+const LAY_ORD = ['ruang', 'hotel', 'tiket', 'jemput', 'konsumsi', 'update', 'kebutuhan', 'aset', 'pinjam', 'arsip', 'locker', 'aksesdata', 'akses', 'event', 'lainnya'];
 const layOrd = k => { const i = LAY_ORD.indexOf(k); return i < 0 ? 99 : i; };
 const layIcon = k => { const l = layByKode(k); return (l && l.ikon) || k; };
 function pesanLagi(t) {
@@ -802,7 +881,7 @@ function layananScreen() {
   return shell([
     el('div', { class: 'top' }, backBtn(), satkerChip()),
     el('div', { class: 'stack', style: 'gap:2px' }, el('span', { style: 'font-size:14px;font-weight:800;color:var(--muted)' }, 'Hi.. ARK Squad 👋'), el('h1', { class: 'h1', style: 'font-size:24px' }, L('perlu bantuan LMSt?', 'need help from LMSt?') + ' 🚀')),
-    el('div', { class: 'grid3' }, (S.boot.layanan || []).filter(l => FORMS[l.kode]).slice().sort((a, b) => layOrd(a.kode) - layOrd(b.kode)).map(l => el('button', { class: 'tile', onclick: () => go('form', { kode: l.kode }) },
+    el('div', { class: 'grid3' }, (S.boot.layanan || []).filter(l => FORMS[l.kode] && l.kode !== 'konsultasi').slice().sort((a, b) => layOrd(a.kode) - layOrd(b.kode)).map(l => el('button', { class: 'tile', onclick: () => go('form', { kode: l.kode }) },
       ic(l.ikon, LAY_BG[l.kode], 'lg'), L(l.nama, l.namaEn))))
   ], 'buat');
 }
@@ -844,8 +923,9 @@ function formScreen() {
   draw();
   const panduanLines = lineList(L(lay.panduan, lay.panduanEn || lay.panduan));
   if (kode === 'update' && S.boot.kontakUpdate) panduanLines.push(L('Contact person: ', 'Contact person: ') + S.boot.kontakUpdate + '.');
-  const team = (lay.manual || ['LMSt ARK', 'Depkom ARK'].includes(S.untuk)) ? [] : ((S.boot.routing || {})[S.untuk] || []);
-  const sub = team.length ? L('Diteruskan ke tim ', 'Goes to team ') + S.untuk + ': ' + team.map(short).join(', ') : L('Ditugaskan oleh Kepala Bagian LMSt ARK', 'Assigned by the LMSt ARK head');
+  const khusus = lay.timKhusus || [];
+  const team = khusus.length ? khusus : (lay.manual || ['LMSt ARK', 'Depkom ARK'].includes(S.untuk)) ? [] : ((S.boot.routing || {})[S.untuk] || []);
+  const sub = khusus.length ? L('Ditangani ', 'Handled by ') + khusus.map(short).join(L(' dan ', ' and ')) : team.length ? L('Diteruskan ke tim ', 'Goes to team ') + S.untuk + ': ' + team.map(short).join(', ') : L('Ditugaskan oleh Kepala Bagian LMSt ARK', 'Assigned by the LMSt ARK head');
   const btn = el('button', { class: 'btn', onclick: () => send() }, L('Kirim permintaan', 'Send request'));
   const send = () => {
     F.errors = validateForm(kode, F.vals);
@@ -1197,7 +1277,7 @@ function infoArkScreen() {
       el('div', { class: 'grow stack', style: 'gap:1px' }, el('b', { style: 'font-size:15px' }, L('Struktur Bidang ARK', 'ARK structure')), el('span', { class: 'hint', style: 'font-size:12.5px' }, 'Depkom ARK · DPAI · DRPK · DPIK · LMSt ARK')), lic('chev'))));
   fill();
   return shell([
-    el('div', { class: 'stack', style: 'gap:2px' }, el('h1', { class: 'h1' }, 'Info ARK 📚'), el('span', { class: 'hint', style: 'font-size:13.5px' }, L('Pengumuman dan info penting untuk ARK Squad', 'Announcements and key info for the ARK Squad'))),
+    el('div', { class: 'between', style: 'align-items:flex-start;gap:10px' }, el('div', { class: 'stack', style: 'gap:2px' }, el('h1', { class: 'h1' }, 'Info ARK 📚'), el('span', { class: 'hint', style: 'font-size:13.5px' }, L('Pengumuman dan info penting untuk ARK Squad', 'Announcements and key info for the ARK Squad'))), langToggle()),
     search, res, main
   ], 'ark');
 }
@@ -1301,7 +1381,8 @@ function papanScreen() {
         el('button', { class: 'btn', onclick: () => go('daftar', { f: 'semua' }) }, '🗂️ ' + L('Daftar tiket', 'All tickets')),
         el('button', { class: 'btn line', onclick: () => go('rekap') }, svg('chart', 20), L('Rekap', 'Recap')),
         el('button', { class: 'btn wa', onclick: () => waOpen(waList(tk.filter(isOpen), L('Tiket aktif · Layanan LMSt ARK', 'Open tickets · LMSt ARK'))) }, lic('wa'), 'WhatsApp'),
-        el('button', { class: 'btn line', onclick: () => go('kelolainfo') }, svg('info', 20), L('Info', 'Info'))),
+        el('button', { class: 'btn line', onclick: () => go('kelolainfo') }, svg('info', 20), L('Info', 'Info')),
+        el('button', { class: 'btn line', style: 'grid-column:1/-1;background:#FFF1E6;border-color:#FBE0CC', onclick: () => go('sarantim') }, '💌 ' + L('Saran dan masukan', 'Feedback') + (S.tim.saranBaru ? ' · ' + S.tim.saranBaru + L(' baru', ' new') : ''))),
       dispo.length ? el('button', { class: 'item', style: 'background:#FFF4D6;border-color:#F5DFA0', onclick: () => go('daftar', { f: 'dispo' }) }, ic('target', '#fff'),
         el('div', { class: 'grow stack', style: 'gap:2px' }, el('b', {}, '🎯 ' + dispo.length + L(' tiket menunggu disposisimu', ' tickets need your assignment')), el('span', { class: 'hint' }, L('LMSt ARK, Depkom ARK, dan layanan manual', 'LMSt ARK, Depkom ARK and manual services'))), lic('chev', 18)) : null,
       mine.length ? el('div', { class: 'stack', style: 'gap:8px' }, el('span', { class: 'sec' }, '💪 ' + L('Bisa kamu kerjakan', 'Ready for you') + ' (' + mine.length + ')'),
@@ -1497,6 +1578,39 @@ function dispoScreen() {
 }
 
 /* ============ KELOLA INFO ============ */
+/* ============ SARAN & MASUKAN (tim) ============ */
+function saranTimScreen() {
+  const f = S.p.f || 'semua';
+  const box = el('div', { class: 'stack', style: 'gap:10px' }, loadingBox());
+  const tabsEl = el('div', { class: 'tabs', role: 'group' });
+  let all = [];
+  const fill = () => {
+    const n = st => all.filter(x => x.status === st).length;
+    tabsEl.replaceChildren(...[['semua', L('Semua', 'All')], ['Baru', L('Baru', 'New') + (n('Baru') ? ' · ' + n('Baru') : '')], ['Dibaca', L('Dibaca', 'Read')], ['Ditindaklanjuti', L('Ditindaklanjuti', 'Done')]].map(([k, t]) =>
+      el('button', { class: 'tab' + (f === k ? ' on' : ''), 'aria-pressed': f === k ? 'true' : 'false', onclick: () => go('sarantim', { f: k }, true) }, t)));
+    const list = all.filter(x => f === 'semua' || x.status === f);
+    box.replaceChildren(...(list.length ? list.map(x => {
+      const ta = el('textarea', { class: 'in', rows: 2, placeholder: L('Tulis tanggapan (opsional), akan terlihat oleh pengirim', 'Reply (optional), visible to the sender') }); ta.value = x.tanggapan;
+      const act = async (selesai, btn) => { btn.disabled = true; try { const r = await api({ action: 'saran_tanggapi', id: x.id, tanggapan: ta.value, selesai }); all = r.saran || []; if (S.tim) S.tim.saranBaru = all.filter(y => y.status === 'Baru').length; fill(); toast(L('Tersimpan', 'Saved')); } catch (e) { toast(e.message, true); btn.disabled = false; } };
+      return el('div', { class: 'card', style: 'gap:8px;padding:14px' },
+        el('div', { class: 'between', style: 'gap:8px' }, el('b', { style: 'font-size:14px' }, saranEmo(x.jenis) + ' ' + x.jenis), saranStatus(x.status)),
+        el('span', { class: 'small' }, '👤 ' + x.nama + (x.satker ? ' · ' + x.satker : '') + ' · ' + fmtD(x.waktu)),
+        el('span', { style: 'font-size:14px;line-height:1.45;white-space:pre-line' }, x.isi),
+        x.oleh ? el('span', { class: 'small' }, '💬 ' + L('Ditanggapi ', 'Replied by ') + short(x.oleh) + (x.wTanggap ? ' · ' + fmtD(x.wTanggap) : '')) : null,
+        ta,
+        el('div', { class: 'grid2' },
+          el('button', { class: 'btn line sm', onclick: e => act(false, e.currentTarget) }, L('Simpan tanggapan', 'Save reply')),
+          el('button', { class: 'btn sm', onclick: e => act(true, e.currentTarget) }, '✅ ' + L('Ditindaklanjuti', 'Mark done'))));
+    }) : [el('div', { class: 'empty' }, '💌', L('Belum ada saran di sini.', 'Nothing here yet.'))]));
+  };
+  api({ action: 'saran_list' }).then(r => { all = r.saran || []; if (S.screen === 'sarantim') fill(); }).catch(e => toast(e.message, true));
+  return shell([
+    el('div', { class: 'top' }, backBtn(), el('h1', { class: 'h1 grow', style: 'font-size:22px' }, L('Saran dan masukan', 'Feedback') + ' 💌')),
+    el('p', { class: 'hint', style: 'margin:-6px 0 0;font-size:13px' }, L('Dari pegawai ARK, terlihat oleh seluruh tim LMSt ARK.', 'From ARK employees, visible to the whole LMSt ARK team.')),
+    tabsEl, box
+  ], 'tim');
+}
+
 function kelolaInfoScreen() {
   const box = el('div', { class: 'stack', style: 'gap:14px' }, loadingBox());
   const F = S.p.F || (S.p.F = { id: '', jenis: 'WFH', judul: '', isi: '', mulai: todayISO(), sampai: todayISO(), sematkan: false });
@@ -1678,7 +1792,7 @@ function downloadDoc(R) {
 /* ============ RENDER ============ */
 const SCREENS = {
   login: loginScreen, buatkode: buatKodeScreen, beranda: berandaScreen, layanan: layananScreen, form: formScreen, sukses: suksesScreen,
-  mine: mineScreen, mdetail: mdetailScreen, ark: infoArkScreen, struktur: strukturScreen, itkat: itKatScreen, ittopik: itTopikScreen, saya: sayaScreen, privasi: privasiScreen,
+  mine: mineScreen, mdetail: mdetailScreen, ark: infoArkScreen, saran: saranScreen, konsulsat: konsulSatScreen, sarantim: saranTimScreen, struktur: strukturScreen, itkat: itKatScreen, ittopik: itTopikScreen, saya: sayaScreen, privasi: privasiScreen,
   papan: papanScreen, daftar: daftarScreen, tdetail: tdetailScreen, dispo: dispoScreen, kelolainfo: kelolaInfoScreen, resetkode: resetKodeScreen, rekap: rekapScreen
 };
 const TEAM_ONLY = ['papan', 'daftar', 'tdetail', 'dispo', 'kelolainfo', 'resetkode', 'rekap'];
